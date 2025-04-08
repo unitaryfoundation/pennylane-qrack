@@ -393,7 +393,7 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
         , hp(false)
         , nw(false)
         , shots(1U)
-        , noise_param(0)
+        , noise_param(ZERO_R1_F)
         , qsim(nullptr)
     {
         // Cut leading '{' and trailing '}'
@@ -567,7 +567,12 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
     {
         return qsim->GetQubitCount();
     }
-    void SetDeviceShots(size_t s) override { shots = s; }
+    void SetDeviceShots(size_t s) override {
+        if ((s > 1U) && (noise_param > ZERO_R1_F)) {
+            throw std::domain_error("Shots > 1 can't be simulated with noise on the Qrack back end! (Likely, you want to set mcm_method=\"one-shot\" on your qnode, with multiple shots.)");
+        }
+        shots = s;
+    }
     [[nodiscard]] auto GetDeviceShots() const -> size_t override { return shots; }
     void StartTapeRecording() override { tapeRecording = true; }
     void StopTapeRecording() override { tapeRecording = false; }
@@ -734,6 +739,10 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
     {
         RT_FAIL_IF(samples.size() != shots * qsim->GetQubitCount(), "Invalid size for the pre-allocated samples");
 
+        if ((shots > 1U) && (noise_param > ZERO_R1_F)) {
+            throw std::domain_error("Shots > 1 can't be simulated with noise on the Qrack back end! (Likely, you want to set mcm_method=\"one-shot\" on your qnode, with multiple shots.)");
+        }
+
         if (shots == 1U) {
             const bitCapInt rev_sample = qsim->MAll();
             const bitLenInt numQubits = qsim->GetQubitCount();
@@ -758,6 +767,10 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
     void PartialSample(DataView<double, 2> &samples, const std::vector<QubitIdType> &wires, size_t shots) override
     {
         RT_FAIL_IF(samples.size() != shots * wires.size(), "Invalid size for the pre-allocated samples");
+
+        if ((shots > 1U) && (noise_param > ZERO_R1_F)) {
+            throw std::domain_error("Shots > 1 can't be simulated with noise on the Qrack back end! (Likely, you want to set mcm_method=\"one-shot\" on your qnode, with multiple shots.)");
+        }
 
         auto &&dev_wires = getDeviceWires(wires);
 
@@ -838,6 +851,10 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
 
         RT_FAIL_IF(eigvals.size() != numElements || counts.size() != numElements,
                    "Invalid size for the pre-allocated counts");
+
+        if ((shots > 1U) && (noise_param > ZERO_R1_F)) {
+            throw std::domain_error("Shots > 1 can't be simulated with noise on the Qrack back end! (Likely, you want to set mcm_method=\"one-shot\" on your qnode, with multiple shots.)");
+        }
 
         auto &&dev_wires = getDeviceWires(wires);
 
