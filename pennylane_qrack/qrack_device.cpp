@@ -43,6 +43,7 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
     bool hp;
     bool nw;
     size_t shots;
+    Qrack::real1_f noise_param;
     Qrack::QInterfacePtr qsim;
     std::map<QubitIdType, bitLenInt> qubit_map;
     std::vector<QrackObservable> obs_cache;
@@ -392,6 +393,7 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
         , hp(false)
         , nw(false)
         , shots(1U)
+        , noise_param(0)
         , qsim(nullptr)
     {
         // Cut leading '{' and trailing '}'
@@ -413,7 +415,6 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
         keyMap["'noise'"] = 10;
 
         size_t pos;
-        Qrack::real1_f noiseParam = 0;
         while ((pos = kwargs.find(":")) != std::string::npos) {
             std::string key = trim(kwargs.substr(0, pos));
             kwargs.erase(0, pos + 1U);
@@ -450,8 +451,8 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
                     hp = val;
                     break;
                 case 10:
-                    noiseParam = std::stof(value);
-                    nw = noiseParam > ZERO_R1;
+                    noise_param = std::stof(value);
+                    nw = noise_param > ZERO_R1;
                     break;
                 default:
                     break;
@@ -459,8 +460,8 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
         }
 
         qsim = QSIM_CONFIG(0U);
-        if (noiseParam > ZERO_R1) {
-            qsim->SetNoiseParameter(noiseParam);
+        if (noise_param > ZERO_R1) {
+            qsim->SetNoiseParameter(noise_param);
         }
     }
 
@@ -558,6 +559,9 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
     {
         // State vector is left empty
         qsim = QSIM_CONFIG(0U);
+        if (noise_param > ZERO_R1) {
+            qsim->SetNoiseParameter(noise_param);
+        }
     }
     [[nodiscard]] auto GetNumQubits() const -> size_t override
     {
