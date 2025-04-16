@@ -23,7 +23,10 @@ import itertools as it
 
 import numpy as np
 
-from pennylane.exceptions import DeviceError, QuantumFunctionError
+from pennylane.exceptions import (
+    DeviceError, 
+    QuantumFunctionError
+)
 from pennylane.devices import QubitDevice
 from pennylane.ops import (
     StatePrep,
