@@ -23,10 +23,7 @@ import itertools as it
 
 import numpy as np
 
-from pennylane.exceptions import (
-    DeviceError, 
-    QuantumFunctionError
-)
+from pennylane.exceptions import DeviceError, QuantumFunctionError
 from pennylane.devices import QubitDevice
 from pennylane.ops import (
     StatePrep,
@@ -162,7 +159,7 @@ class QrackDevice(QubitDevice):
     # Use CPU/GPU method hybridization? (Default is "false")
     isCpuGpuHybrid = True
     # Allocate GPU buffer from general host heap? (Default is "false"; "true" might improve performance or reliability in certain cases, like if using an Intel HD as accelerator)
-    isHostPointer = True if os.environ.get('PYQRACK_HOST_POINTER_DEFAULT_ON') else False
+    isHostPointer = True if os.environ.get("PYQRACK_HOST_POINTER_DEFAULT_ON") else False
     # Noise parameter. (Default is "0"; depolarizing noise intensity can also be controlled by "QRACK_GATE_DEPOLARIZATION" environment variable)
     noise = 0
 
