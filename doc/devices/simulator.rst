@@ -54,7 +54,7 @@ This is a complete list of boolean options and their meanings:
     +---------------------------+-------------+------------------------------------------------------------------------------------+
     | **Parameter**             | **Default** | **Description**                                                                    |
     +===========================+=============+====================================================================================+
-    | `isStabilizerHybrid`      | True        | Use "hybrid" stabilizer optimization?                                              |
+    | `isStabilizerHybrid`      | False       | Use "hybrid" stabilizer optimization?                                              |
     |                           |             | (Non-Clifford circuits will fall back to near-Clifford or universal simulation.)   |
     +---------------------------+-------------+------------------------------------------------------------------------------------+
     | `isTensorNetwork`         | True        | Use "tensor network" optimization?                                                 |
