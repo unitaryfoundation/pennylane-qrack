@@ -35,7 +35,7 @@ with open("./pennylane_qrack/_version.py") as f:
 requirements = ["pennylane>=0.39.0", "pyqrack>=1.30.0", "numpy>=1.16"]
 
 info = {
-    "name": "pennylane-qrack",
+    "name": "pennylane-qrack-cpu",
     "version": version,
     "maintainer": "vm6502q",
     "maintainer_email": "stranoj@gmail.com",
