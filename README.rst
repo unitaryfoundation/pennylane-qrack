@@ -5,7 +5,7 @@ PennyLane-Qrack Plugin
 
 The PennyLane-Qrack plugin integrates the Qrack quantum computing framework with PennyLane's quantum machine learning capabilities.
 
-**Performance can benefit greatly from following the `Qrack repository "Quick Start" and "Power user considerations." <https://github.com/unitaryfund/qrack/blob/main/README.md#quick-start>`__ **
+Performance can benefit greatly from following the `Qrack repository "Quick Start" and "Power user considerations." <https://github.com/unitaryfund/qrack/blob/main/README.md#quick-start>`__
 
 This plugin is addapted from the `PennyLane-Qulacs plugin, <https://github.com/PennyLaneAI/pennylane-qulacs>`__ under the Apache License 2.0, with many thanks to the original developers!
 
