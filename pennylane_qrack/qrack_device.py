@@ -23,7 +23,15 @@ import itertools as it
 
 import numpy as np
 
-from pennylane.exceptions import DeviceError, QuantumFunctionError
+# PennyLane v0.42 introduced the `exceptions` module and will raise
+# deprecation warnings if they are imported from the top-level module.
+
+# This ensures backwards compatibility with older versions of PennyLane.
+try:
+    from pennylane.exceptions import DeviceError, QuantumFunctionError
+except (ModuleNotFoundError, ImportError) as import_error:
+    from pennylane import DeviceError, QuantumFunctionError
+
 from pennylane.devices import QubitDevice
 from pennylane.ops import (
     StatePrep,
