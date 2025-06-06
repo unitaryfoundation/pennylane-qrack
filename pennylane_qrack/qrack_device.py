@@ -23,7 +23,15 @@ import itertools as it
 
 import numpy as np
 
-from pennylane import DeviceError, QuantumFunctionError
+# PennyLane v0.42 introduced the `exceptions` module and will raise
+# deprecation warnings if they are imported from the top-level module.
+
+# This ensures backwards compatibility with older versions of PennyLane.
+try:
+    from pennylane.exceptions import DeviceError, QuantumFunctionError
+except (ModuleNotFoundError, ImportError) as import_error:
+    from pennylane import DeviceError, QuantumFunctionError
+
 from pennylane.devices import QubitDevice
 from pennylane.ops import (
     StatePrep,
@@ -159,7 +167,7 @@ class QrackDevice(QubitDevice):
     # Use CPU/GPU method hybridization? (Default is "false")
     isCpuGpuHybrid = True
     # Allocate GPU buffer from general host heap? (Default is "false"; "true" might improve performance or reliability in certain cases, like if using an Intel HD as accelerator)
-    isHostPointer = True if os.environ.get('PYQRACK_HOST_POINTER_DEFAULT_ON') else False
+    isHostPointer = True if os.environ.get("PYQRACK_HOST_POINTER_DEFAULT_ON") else False
     # Noise parameter. (Default is "0"; depolarizing noise intensity can also be controlled by "QRACK_GATE_DEPOLARIZATION" environment variable)
     noise = 0
 
