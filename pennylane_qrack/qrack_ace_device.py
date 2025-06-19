@@ -383,6 +383,9 @@ class QrackAceDevice(QubitDevice):
         ]:
             raise DeviceError(f"Operation {opname} is not supported on a {self.short_name} device.")
 
+    def analytic_probability(self, wires=None):
+        raise DeviceError(f"analytic_probability is not supported on a {self.short_name} device. (Specify a finite number of shots, instead.)")
+
     def expval(self, observable, **kwargs):
         if self.shots is None:
             if isinstance(observable.name, list):
