@@ -718,10 +718,9 @@ class QrackDevice(QubitDevice):
 
             return self._samples
 
-        samples = np.array(
-            self._state.measure_shots(list(range(self.num_wires - 1, -1, -1)), self.shots)
-        )
-        self._samples = QubitDevice.states_to_binary(samples, self.num_wires)
+        # QubitDevice.states_to_binary() doesn't work for >64qb. (Fix by Elara, the custom OpenAI GPT)
+        samples = self._state.measure_shots(list(range(self.num_wires - 1, -1, -1)), self.shots)
+        self._samples = np.array([list(format(b, f"0{self.num_wires}b")) for b in samples], dtype=np.int8)
 
         return self._samples
 
