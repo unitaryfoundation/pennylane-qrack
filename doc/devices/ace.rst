@@ -1,16 +1,15 @@
 The Simulator device
 ====================
 
-You can instantiate the Qrack device in PennyLane as follows:
+You can instantiate the Qrack ACE device in PennyLane as follows:
 
 .. code-block:: python
 
     import pennylane as qml
-    from catalyst import qjit # optional, for JIT compilation
 
-    dev = qml.device('qrack.simulator', wires=2)
+    dev = qml.device('qrack.ace', wires=2, shots=1024)
 
-This device can then be used just like other devices for the definition and evaluation of QNodes within PennyLane.
+This device is highly optimized for transverse-field Ising model, but it has no analytical mode and must have finite shots.
 A simple quantum function that returns the expectation value of a measurement and depends on three classical input
 parameters would look like:
 
@@ -78,10 +77,18 @@ This is a complete list of boolean options and their meanings:
     | `noise`                   | 0           | Depolarizing noise parameter                                                        |
     |                           |             | (Noise intensity also responds to "QRACK_GATE_DEPOLARIZATION" environment variable) |
     +---------------------------+-------------+-------------------------------------------------------------------------------------+
+    | `long_range_columns`      | 4           | Number of ideal simulation columns between semi-classical boundary columns          |
+    |                           |             |                                                                                     |
+    +---------------------------+-------------+-------------------------------------------------------------------------------------+
+    | `long_range_rows`         | 4           | Number of ideal simulation rows between semi-classical boundary rows                |
+    |                           |             |                                                                                     |
+    +---------------------------+-------------+-------------------------------------------------------------------------------------+
+    | `is_transpose`            | False       | Transpose rows and columns?                                                         |
+    |                           |             |                                                                                     |
+    +---------------------------+-------------+-------------------------------------------------------------------------------------+
 
 
 Supported operations
 ~~~~~~~~~~~~~~~~~~~~
 
-The ``qrack.simulator`` device supports all PennyLane
-`operations and observables <https://pennylane.readthedocs.io/en/stable/introduction/operations.html>`_.
+The ``qrack.ace`` device only supports (all PennyLane) single-qubit gates and singly-controlled Pauli gates.
