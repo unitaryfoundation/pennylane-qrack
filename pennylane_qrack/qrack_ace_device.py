@@ -123,7 +123,7 @@ class QrackAceDevice(QubitDevice):
 
     # Use "hybrid" stabilizer optimization? (Default is "true"; non-Clifford circuits will fall back to near-Clifford or universal simulation)
     isStabilizerHybrid = False
-    # Use "tensor network" optimization? (Default is "true"; prevents dynamic qubit de-allocation; might function sub-optimally with "hybrid" stabilizer enabled)
+    # Use "tensor network" optimization? (Default is "false"; prevents dynamic qubit de-allocation; might function sub-optimally with "hybrid" stabilizer enabled)
     isTensorNetwork = False
     # Use Schmidt decomposition optimizations? (Default is "true")
     isSchmidtDecompose = True

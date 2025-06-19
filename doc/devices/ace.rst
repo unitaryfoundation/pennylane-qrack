@@ -56,7 +56,7 @@ This is a complete list of boolean options and their meanings:
     | `isStabilizerHybrid`      | False       | Use "hybrid" stabilizer optimization?                                               |
     |                           |             | (Non-Clifford circuits will fall back to near-Clifford or universal simulation.)    |
     +---------------------------+-------------+-------------------------------------------------------------------------------------+
-    | `isTensorNetwork`         | True        | Use "tensor network" optimization?                                                  |
+    | `isTensorNetwork`         | False       | Use "tensor network" optimization?                                                  |
     |                           |             | (This option locally simplifies circuits, just-in-time, before running them.)       |
     +---------------------------+-------------+-------------------------------------------------------------------------------------+
     | `isSchmidtDecompose`      | True        | Use Schmidt decomposition optimizations?                                            |
