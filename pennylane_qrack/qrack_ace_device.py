@@ -118,7 +118,7 @@ class QrackAceDevice(QubitDevice):
     }
 
     config_filepath = pathlib.Path(
-        os.path.dirname(sys.modules[__name__].__file__) + "/QrackDeviceConfig.toml"
+        os.path.dirname(sys.modules[__name__].__file__) + "/QrackAceDeviceConfig.toml"
     )
 
     # Use "hybrid" stabilizer optimization? (Default is "true"; non-Clifford circuits will fall back to near-Clifford or universal simulation)
