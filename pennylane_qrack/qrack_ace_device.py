@@ -52,7 +52,7 @@ class QrackAceDevice(QubitDevice):
     """Qrack Ace device"""
 
     name = "Qrack device"
-    short_name = "qrack.simulator"
+    short_name = "qrack.ace"
     pennylane_requires = ">=0.11.0"
     version = __version__
     author = "Daniel Strano, adapted from Steven Oud and Xanadu"
