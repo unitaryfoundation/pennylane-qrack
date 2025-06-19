@@ -21,23 +21,32 @@ schema = 3
 PauliX                  = { properties = [ "controllable", "invertible" ] }
 PauliY                  = { properties = [ "controllable", "invertible" ] }
 PauliZ                  = { properties = [ "controllable", "invertible" ] }
-SX                      = { properties = [ "invertible" ] }
-MultiRZ                 = { properties = [ "invertible" ] }
-Hadamard                = { properties = [ "invertible" ] }
-S                       = { properties = [ "invertible" ] }
-T                       = { properties = [ "invertible" ] }
-CNOT                    = { properties = [ "invertible" ] }
-SWAP                    = { properties = [ "invertible" ] }
-ISWAP                   = { properties = [ "invertible" ] }
-PSWAP                   = { properties = [ "invertible" ] }
-CY                      = { properties = [ "invertible" ] }
-CZ                      = { properties = [ "invertible" ] }
-PhaseShift              = { properties = [ "invertible" ] }
-RX                      = { properties = [ "invertible" ] }
-RY                      = { properties = [ "invertible" ] }
-RZ                      = { properties = [ "invertible" ] }
-Rot                     = { properties = [ "invertible" ] }
-U3                      = { properties = [ "invertible" ] }
+SX                      = { properties = [ "controllable", "invertible" ] }
+MultiRZ                 = { properties = [ "controllable", "invertible" ] }
+Hadamard                = { properties = [ "controllable", "invertible" ] }
+S                       = { properties = [ "controllable", "invertible" ] }
+T                       = { properties = [ "controllable", "invertible" ] }
+CNOT                    = { properties = [ "controllable", "invertible" ] }
+SWAP                    = { properties = [ "controllable", "invertible" ] }
+CSWAP                   = { properties = [ "controllable", "invertible" ] }
+ISWAP                   = { properties = [ "controllable", "invertible" ] }
+PSWAP                   = { properties = [ "controllable", "invertible" ] }
+Toffoli                 = { properties = [ "controllable", "invertible" ] }
+CY                      = { properties = [ "controllable", "invertible" ] }
+CZ                      = { properties = [ "controllable", "invertible" ] }
+PhaseShift              = { properties = [ "controllable", "invertible" ] }
+ControlledPhaseShift    = { properties = [ "controllable", "invertible" ] }
+CPhase                  = { properties = [ "controllable", "invertible" ] }
+RX                      = { properties = [ "controllable", "invertible" ] }
+RY                      = { properties = [ "controllable", "invertible" ] }
+RZ                      = { properties = [ "controllable", "invertible" ] }
+Rot                     = { properties = [ "controllable", "invertible" ] }
+CRX                     = { properties = [ "controllable", "invertible" ] }
+CRY                     = { properties = [ "controllable", "invertible" ] }
+CRZ                     = { properties = [ "controllable", "invertible" ] }
+CRot                    = { properties = [ "controllable", "invertible" ] }
+U3                      = { properties = [ "controllable", "invertible" ] }
+MultiControlledX        = { properties = [ "controllable", "invertible" ] }
 Identity                = { properties = [ "controllable", "invertible" ] }
 
 # Observables supported by the device for measurements. The observables defined
