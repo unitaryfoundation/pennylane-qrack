@@ -44,7 +44,7 @@ info = {
     "packages": ["pennylane_qrack"],
     "cmdclass": {"build_py": Build},
     "entry_points": {
-        "pennylane.plugins": ["qrack.simulator = pennylane_qrack.qrack_device:QrackDevice"]
+        "pennylane.plugins": ["qrack.simulator = pennylane_qrack.qrack_device:QrackDevice", "qrack.ace = pennylane_qrack.qrack_ace_device:QrackAceDevice"]
     },
     "description": "PennyLane plugin for Qrack.",
     "long_description": open("README.rst").read(),
