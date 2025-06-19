@@ -94,13 +94,13 @@ CountsMP        = { conditions = [ "finiteshots" ] }
 [compilation]
 
 # Whether the device is compatible with qjit.
-qjit_compatible = true
+qjit_compatible = false
 
 # Whether the device requires run time generation of the quantum circuit.
 runtime_code_generation = false
 
 # Whether the device supports allocating and releasing qubits during execution.
-dynamic_qubit_management = true
+dynamic_qubit_management = false
 
 # The methods of handling mid-circuit measurements that the device supports,
 # e.g., "one-shot", "tree-traversal", "device", etc. An empty list indicates
