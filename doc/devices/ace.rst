@@ -91,4 +91,4 @@ This is a complete list of boolean options and their meanings:
 Supported operations
 ~~~~~~~~~~~~~~~~~~~~
 
-The ``qrack.ace`` device only supports (all PennyLane) single-qubit gates and singly-controlled Pauli gates.
+The ``qrack.ace`` device only supports (all PennyLane) single-qubit gates, singly-controlled Pauli gates, and SWAP variants without control qubits.
