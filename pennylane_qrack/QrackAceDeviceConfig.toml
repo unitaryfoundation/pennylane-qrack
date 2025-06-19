@@ -82,10 +82,10 @@ Prod = {}
 #
 [measurement_processes]
 
-ExpectationMP   = { conditions = [ "analytic" ] }
-VarianceMP      = { conditions = [ "analytic" ] }
-ProbabilityMP   = { conditions = [ "analytic" ] }
-StateMP         = { conditions = [ "analytic" ] }
+ExpectationMP   = { conditions = [ "finiteshots" ] }
+VarianceMP      = { conditions = [ "finiteshots" ] }
+ProbabilityMP   = { conditions = [ "finiteshots" ] }
+StateMP         = { conditions = [ "finiteshots" ] }
 SampleMP        = { conditions = [ "finiteshots" ] }
 CountsMP        = { conditions = [ "finiteshots" ] }
 
