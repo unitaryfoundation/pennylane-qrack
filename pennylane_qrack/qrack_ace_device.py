@@ -85,11 +85,6 @@ class QrackAceDevice(QubitDevice):
         "Identity",
         "C(Identity)",
         "MultiRZ",
-        "C(MultiRZ)",
-        "CRX",
-        "CRY",
-        "CRZ",
-        "CRot",
         "SWAP",
         "ISWAP",
         "PSWAP",
@@ -110,10 +105,8 @@ class QrackAceDevice(QubitDevice):
         "Hadamard",
         "SX",
         "PhaseShift",
-        "C(PhaseShift)",
         "U3",
         "Rot",
-        "CPhase",
     }
 
     config_filepath = pathlib.Path(
