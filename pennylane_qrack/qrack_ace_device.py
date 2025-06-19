@@ -113,7 +113,6 @@ class QrackAceDevice(QubitDevice):
         "C(PhaseShift)",
         "U3",
         "Rot",
-        "ControlledPhaseShift",
         "CPhase",
     }
 
