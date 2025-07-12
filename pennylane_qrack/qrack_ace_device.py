@@ -134,11 +134,11 @@ class QrackAceDevice(QubitDevice):
     # Noise parameter. (Default is "0"; depolarizing noise intensity can also be controlled by "QRACK_GATE_DEPOLARIZATION" environment variable)
     noise = 0
     # How many full simulation columns, between border columns
-    long_range_columns=4
+    long_range_columns = 4
     # How many full simulation rows, between border rows
-    long_range_rows=4
+    long_range_rows = 4
     # Whether to transpose rows and columns
-    is_transpose=False
+    is_transpose = False
 
     def __init__(self, wires=0, shots=None, **kwargs):
         options = dict(kwargs)
@@ -376,7 +376,9 @@ class QrackAceDevice(QubitDevice):
             raise DeviceError(f"Operation {opname} is not supported on a {self.short_name} device.")
 
     def analytic_probability(self, wires=None):
-        raise DeviceError(f"analytic_probability is not supported on a {self.short_name} device. (Specify a finite number of shots, instead.)")
+        raise DeviceError(
+            f"analytic_probability is not supported on a {self.short_name} device. (Specify a finite number of shots, instead.)"
+        )
 
     def expval(self, observable, **kwargs):
         if self.shots is None:
@@ -433,7 +435,9 @@ class QrackAceDevice(QubitDevice):
 
         # QubitDevice.states_to_binary() doesn't work for >64qb. (Fix by Elara, the custom OpenAI GPT)
         samples = self._state.measure_shots(list(range(self.num_wires - 1, -1, -1)), self.shots)
-        self._samples = np.array([list(format(b, f"0{self.num_wires}b")) for b in samples], dtype=np.int8)
+        self._samples = np.array(
+            [list(format(b, f"0{self.num_wires}b")) for b in samples], dtype=np.int8
+        )
 
         return self._samples
 
