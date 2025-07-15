@@ -483,8 +483,6 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
         }
         return ids;
     }
-    [[nodiscard]] auto Zero() const -> Result override { return const_cast<Result>(&QRACK_RESULT_FALSE_CONST); }
-    [[nodiscard]] auto One() const -> Result override { return const_cast<Result>(&QRACK_RESULT_TRUE_CONST); }
     auto Observable(ObsId id, const std::vector<std::complex<double>> &matrix,
                     const std::vector<QubitIdType> &wires) -> ObsIdType override
     {
@@ -576,21 +574,6 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
     [[nodiscard]] auto GetDeviceShots() const -> size_t override { return shots; }
     void StartTapeRecording() override { tapeRecording = true; }
     void StopTapeRecording() override { tapeRecording = false; }
-    void PrintState() override
-    {
-        const size_t numQubits = qsim->GetQubitCount();
-        const size_t maxQPower = (size_t)((uint64_t)qsim->GetMaxQPower());
-        const size_t maxLcv = maxQPower - 1U;
-        size_t idx = 0U;
-        std::cout << "*** State-Vector of Size " << maxQPower << " ***" << std::endl;
-        std::cout << "[";
-        std::unique_ptr<Qrack::complex> sv(new Qrack::complex[maxQPower]);
-        qsim->GetQuantumState(sv.get());
-        for (; idx < maxLcv; ++idx) {
-            std::cout << sv.get()[idx] << ", ";
-        }
-        std::cout << sv.get()[idx] << "]" << std::endl;
-    }
     void NamedOperation(const std::string &name, const std::vector<double> &params,
                         const std::vector<QubitIdType> &wires, bool inverse,
                         const std::vector<QubitIdType> &controlled_wires,
@@ -735,7 +718,7 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
             }
         }
     }
-    void Sample(DataView<double, 2> &samples, size_t shots) override
+    void Sample(DataView<double, 2> &samples) override
     {
         RT_FAIL_IF(samples.size() != shots * qsim->GetQubitCount(), "Invalid size for the pre-allocated samples");
 
@@ -764,7 +747,7 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
         const std::map<bitCapInt, int> q_samples = qsim->MultiShotMeasureMask(qPowers, shots);
         _SampleBody(qPowers.size(), q_samples, samples);
     }
-    void PartialSample(DataView<double, 2> &samples, const std::vector<QubitIdType> &wires, size_t shots) override
+    void PartialSample(DataView<double, 2> &samples, const std::vector<QubitIdType> &wires) override
     {
         RT_FAIL_IF(samples.size() != shots * wires.size(), "Invalid size for the pre-allocated samples");
 
@@ -809,8 +792,7 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
             }
         }
     }
-    void Counts(DataView<double, 1> &eigvals, DataView<int64_t, 1> &counts,
-                size_t shots) override
+    void Counts(DataView<double, 1> &eigvals, DataView<int64_t, 1> &counts) override
     {
         const size_t numQubits = qsim->GetQubitCount();
         const size_t numElements = 1U << numQubits;
@@ -844,7 +826,7 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
     }
 
     void PartialCounts(DataView<double, 1> &eigvals, DataView<int64_t, 1> &counts,
-                       const std::vector<QubitIdType> &wires, size_t shots) override
+                       const std::vector<QubitIdType> &wires) override
     {
         const size_t numQubits = wires.size();
         const size_t numElements = 1U << numQubits;
