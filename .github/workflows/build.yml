@@ -24,7 +24,7 @@ jobs:
         with:
           repository: 'PennyLaneAI/catalyst'
           path: catalyst
-          ref: 2c45243b0b848b30b979f7840f969f6378019dd0
+          ref: 6fc5e13973456b32c85915737ccaed55ea6ab31c
 
       - name: Prepare Build Environment (Linux)
         run: |
@@ -67,7 +67,7 @@ jobs:
         with:
           repository: 'PennyLaneAI/catalyst'
           path: catalyst
-          ref: 2c45243b0b848b30b979f7840f969f6378019dd0
+          ref: 6fc5e13973456b32c85915737ccaed55ea6ab31c
 
       - name: Prepare Build Environment (Linux)
         run: |
@@ -110,7 +110,7 @@ jobs:
         with:
           repository: 'PennyLaneAI/catalyst'
           path: catalyst
-          ref: 2c45243b0b848b30b979f7840f969f6378019dd0
+          ref: 6fc5e13973456b32c85915737ccaed55ea6ab31c
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -161,7 +161,7 @@ jobs:
         with:
           repository: 'PennyLaneAI/catalyst'
           path: catalyst
-          ref: 2c45243b0b848b30b979f7840f969f6378019dd0
+          ref: 6fc5e13973456b32c85915737ccaed55ea6ab31c
 
       - name: Set up Python
         uses: actions/setup-python@v5
