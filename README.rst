@@ -22,7 +22,8 @@ Features
 
 * Provides access to a PyQrack simulator backend via the ``qrack.simulator`` device
 * Provides access to a (C++) Qrack simulator backend for Catalyst (also) via the ``qrack.simulator`` device
-* Provides access to a PyQrack simulator backend optimized for approximate NISQ-scale TFIM via the ``qrack.ace`` device
+* Provides access to a PyQrack Clifford-only simulator backend via the ``qrack.stabilizer`` device
+* Provides access to a PyQrack simulator backend optimized for large-scale approximate simulation via the ``qrack.ace`` device
 
 .. installation-start-inclusion-marker-do-not-remove
 
