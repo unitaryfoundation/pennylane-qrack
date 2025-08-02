@@ -39,7 +39,7 @@ from pennylane.ops import (
 )
 from pennylane.wires import Wires
 
-from pyqrack import QrackAceBackend, Pauli
+from pyqrack import QrackStabilizer, Pauli
 
 from ._version import __version__
 from sys import platform as _platform
@@ -48,11 +48,11 @@ from sys import platform as _platform
 tolerance = 1e-10
 
 
-class QrackAceDevice(QubitDevice):
-    """Qrack Ace device"""
+class QrackStabilizerDevice(QubitDevice):
+    """Qrack Stabilizer device"""
 
-    name = "Qrack Ace device"
-    short_name = "qrack.ace"
+    name = "Qrack stabilizer device"
+    short_name = "qrack.stabilizer"
     pennylane_requires = ">=0.11.0"
     version = __version__
     author = "Daniel Strano, adapted from Steven Oud and Xanadu"
@@ -61,7 +61,7 @@ class QrackAceDevice(QubitDevice):
         "model": "qubit",
         "tensor_observables": True,
         "inverse_operations": True,
-        "returns_state": False,
+        "returns_state": True,
     }
 
     _observable_map = {
@@ -84,7 +84,6 @@ class QrackAceDevice(QubitDevice):
     operations = {
         "Identity",
         "C(Identity)",
-        "MultiRZ",
         "SWAP",
         "ISWAP",
         "PSWAP",
@@ -92,10 +91,6 @@ class QrackAceDevice(QubitDevice):
         "CY",
         "CZ",
         "S",
-        "T",
-        "RX",
-        "RY",
-        "RZ",
         "PauliX",
         "C(PauliX)",
         "PauliY",
@@ -104,102 +99,17 @@ class QrackAceDevice(QubitDevice):
         "C(PauliZ)",
         "Hadamard",
         "SX",
-        "PhaseShift",
-        "U3",
-        "Rot",
     }
 
     config_filepath = pathlib.Path(
-        os.path.dirname(sys.modules[__name__].__file__) + "/QrackAceDeviceConfig.toml"
+        os.path.dirname(sys.modules[__name__].__file__) + "/QrackStabilizerDeviceConfig.toml"
     )
 
-    # Use "hybrid" stabilizer optimization? (Default is "true"; non-Clifford circuits will fall back to near-Clifford or universal simulation)
-    isStabilizerHybrid = False
-    # Use "tensor network" optimization? (Default is "false"; prevents dynamic qubit de-allocation; might function sub-optimally with "hybrid" stabilizer enabled)
-    isTensorNetwork = False
-    # Use Schmidt decomposition optimizations? (Default is "true")
-    isSchmidtDecompose = True
-    # Distribute Schmidt-decomposed qubit subsystems to multiple GPUs or accelerators, if available? (Default is "true"; mismatched device capacities might hurt overall performance)
-    isSchmidtDecomposeMulti = True
-    # Use "quantum binary decision diagram" ("QBDD") methods? (Default is "false"; note that QBDD is CPU-only)
-    isBinaryDecisionTree = False
-    # Use GPU acceleration? (Default is "true")
-    isOpenCL = True
-    # Use multi-GPU (or "multi-page") acceleration? (Default is "false")
-    isPaged = True
-    # Use CPU/GPU method hybridization? (Default is "false")
-    isCpuGpuHybrid = True
-    # Allocate GPU buffer from general host heap? (Default is "false"; "true" might improve performance or reliability in certain cases, like if using an Intel HD as accelerator)
-    isHostPointer = True if os.environ.get("PYQRACK_HOST_POINTER_DEFAULT_ON") else False
-    # Noise parameter. (Default is "0"; depolarizing noise intensity can also be controlled by "QRACK_GATE_DEPOLARIZATION" environment variable)
-    noise = 0
-    # How many full simulation columns, between border columns
-    long_range_columns = 4
-    # How many full simulation rows, between border rows
-    long_range_rows = 4
-    # Whether to transpose rows and columns
-    is_transpose = False
-
     def __init__(self, wires=0, shots=None, **kwargs):
-        options = dict(kwargs)
-        if "isStabilizerHybrid" in options:
-            self.isStabilizerHybrid = options["isStabilizerHybrid"]
-        if "isTensorNetwork" in options:
-            self.isTensorNetwork = options["isTensorNetwork"]
-        if "isSchmidtDecompose" in options:
-            self.isSchmidtDecompose = options["isSchmidtDecompose"]
-        if "isBinaryDecisionTree" in options:
-            self.isBinaryDecisionTree = options["isBinaryDecisionTree"]
-        if "isOpenCL" in options:
-            self.isOpenCL = options["isOpenCL"]
-        if "isPaged" in options:
-            self.isPaged = options["isPaged"]
-        if "isCpuGpuHybrid" in options:
-            self.isCpuGpuHybrid = options["isCpuGpuHybrid"]
-        if "isHostPointer" in options:
-            self.isHostPointer = options["isHostPointer"]
-        if "noise" in options:
-            self.noise = options["noise"]
-            if (self.noise != 0) and (shots is None):
-                raise ValueError("Shots must be finite for noisy simulation (not analytical mode).")
-        if "long_range_columns" in options:
-            self.long_range_columns = options["long_range_columns"]
-        if "long_range_rows" in options:
-            self.long_range_rows = options["long_range_rows"]
-        if "is_transpose" in options:
-            self.is_transpose = options["is_transpose"]
-
         super().__init__(wires=wires, shots=shots)
         self.shots = shots
-        self._state = QrackAceBackend(
-            self.num_wires,
-            long_range_columns=self.long_range_columns,
-            long_range_rows=self.long_range_rows,
-            is_transpose=self.is_transpose,
-            isStabilizerHybrid=self.isStabilizerHybrid,
-            isTensorNetwork=self.isTensorNetwork,
-            isSchmidtDecompose=self.isSchmidtDecompose,
-            isBinaryDecisionTree=self.isBinaryDecisionTree,
-            isOpenCL=self.isOpenCL,
-            isCpuGpuHybrid=self.isCpuGpuHybrid,
-            isHostPointer=self.isHostPointer,
-            noise=self.noise,
-        )
-        self.device_kwargs = {
-            "long_range_columns": self.long_range_columns,
-            "long_range_rows": self.long_range_rows,
-            "is_transpose": self.is_transpose,
-            "is_hybrid_stabilizer": self.isStabilizerHybrid,
-            "is_tensor_network": self.isTensorNetwork,
-            "is_schmidt_decompose": self.isSchmidtDecompose,
-            "is_schmidt_decompose_parallel": self.isSchmidtDecomposeMulti,
-            "is_qpdd": self.isBinaryDecisionTree,
-            "is_gpu": self.isOpenCL,
-            "is_paged": self.isPaged,
-            "is_hybrid_cpu_gpu": self.isCpuGpuHybrid,
-            "is_host_pointer": self.isHostPointer,
-            "noise": self.noise,
-        }
+        self._state = QrackStabilizer(self.num_wires)
+        self.device_kwargs = {}
         self._circuit = []
 
     def _reverse_state(self):
@@ -257,12 +167,6 @@ class QrackAceDevice(QubitDevice):
 
         par = op.parameters
 
-        if opname == "MultiRZ":
-            device_wires = self.map_wires(op.wires)
-            for q in device_wires:
-                self._state.r(Pauli.PauliZ, par[0], q)
-            return
-
         # translate op wire labels to consecutive wire labels used by the device
         device_wires = self.map_wires(
             (op.control_wires + op.wires) if op.control_wires else op.wires
@@ -299,30 +203,6 @@ class QrackAceDevice(QubitDevice):
         elif opname == "S.inv":
             for label in device_wires.labels:
                 self._state.adjs(label)
-        elif opname == "T":
-            for label in device_wires.labels:
-                self._state.t(label)
-        elif opname == "T.inv":
-            for label in device_wires.labels:
-                self._state.adjt(label)
-        elif opname == "RX":
-            for label in device_wires.labels:
-                self._state.r(Pauli.PauliX, par[0], label)
-        elif opname == "RX.inv":
-            for label in device_wires.labels:
-                self._state.r(Pauli.PauliX, -par[0], label)
-        elif opname == "RY":
-            for label in device_wires.labels:
-                self._state.r(Pauli.PauliY, par[0], label)
-        elif opname == "RY.inv":
-            for label in device_wires.labels:
-                self._state.r(Pauli.PauliY, -par[0], label)
-        elif opname == "RZ":
-            for label in device_wires.labels:
-                self._state.r(Pauli.PauliZ, par[0], label)
-        elif opname == "RZ.inv":
-            for label in device_wires.labels:
-                self._state.r(Pauli.PauliZ, -par[0], label)
         elif opname in ["PauliX", "PauliX.inv"]:
             for label in device_wires.labels:
                 self._state.x(label)
@@ -343,30 +223,6 @@ class QrackAceDevice(QubitDevice):
             half_pi = math.pi / 2
             for label in device_wires.labels:
                 self._state.u(label, -half_pi, -half.pi, half_pi)
-        elif opname == "PhaseShift":
-            half_par = par[0] / 2
-            for label in device_wires.labels:
-                self._state.u(label, 0, half_par, half_par)
-        elif opname == "PhaseShift.inv":
-            half_par = par[0] / 2
-            for label in device_wires.labels:
-                self._state.u(label, 0, -half_par, -half_par)
-        elif opname == "U3":
-            for label in device_wires.labels:
-                self._state.u(label, par[0], par[1], par[2])
-        elif opname == "U3.inv":
-            for label in device_wires.labels:
-                self._state.u(label, -par[0], -par[2], -par[1])
-        elif opname == "Rot":
-            for label in device_wires.labels:
-                self._state.r(Pauli.PauliZ, par[0], label)
-                self._state.r(Pauli.PauliY, par[1], label)
-                self._state.r(Pauli.PauliZ, par[2], label)
-        elif opname == "Rot.inv":
-            for label in device_wires.labels:
-                self._state.r(Pauli.PauliZ, -par[2], label)
-                self._state.r(Pauli.PauliY, -par[1], label)
-                self._state.r(Pauli.PauliZ, -par[0], label)
         elif opname not in [
             "Identity",
             "Identity.inv",
@@ -376,9 +232,23 @@ class QrackAceDevice(QubitDevice):
             raise DeviceError(f"Operation {opname} is not supported on a {self.short_name} device.")
 
     def analytic_probability(self, wires=None):
-        raise DeviceError(
-            f"analytic_probability is not supported on a {self.short_name} device. (Specify a finite number of shots, instead.)"
-        )
+        """Return the (marginal) analytic probability of each computational basis state."""
+        if self._state is None:
+            return None
+
+        all_probs = self._abs(self.state) ** 2
+        prob = self.marginal_prob(all_probs, wires)
+
+        if (not "QRACK_FPPOW" in os.environ) or (6 > int(os.environ.get("QRACK_FPPOW"))):
+            tot_prob = 0
+            for p in prob:
+                tot_prob = tot_prob + p
+
+            if tot_prob != 1.0:
+                for i in range(len(prob)):
+                    prob[i] = prob[i] / tot_prob
+
+        return prob
 
     def expval(self, observable, **kwargs):
         if self.shots is None:
@@ -388,6 +258,10 @@ class QrackAceDevice(QubitDevice):
                 b = [self._observable_map[obs.name] for obs in observable.operands]
             else:
                 b = [self._observable_map[observable.name]]
+
+            if None not in b:
+                q = self.map_wires(observable.wires)
+                return self._state.pauli_expectation(q, b)
 
             # exact expectation value
             if callable(observable.eigvals):

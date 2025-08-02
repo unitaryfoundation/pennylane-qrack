@@ -1,0 +1,99 @@
+schema = 3
+
+# The set of all gate types supported at the runtime execution interface of the
+# device, i.e., what is supported by the `execute` method. The gate definitions
+# should have the following format:
+#
+#   GATE = { properties = [ PROPS ], conditions = [ CONDS ] }
+#
+# where PROPS and CONS are zero or more comma separated quoted strings.
+#
+# PROPS: additional support provided for each gate.
+#        - "controllable": if a controlled version of this gate is supported.
+#        - "invertible": if the adjoint of this operation is supported.
+#        - "differentiable": if device gradient is supported for this gate.
+# CONDS: constraints on the support for each gate.
+#        - "analytic" or "finiteshots": if this operation is only supported in
+#          either analytic execution or with shots, respectively.
+#
+[operators.gates]
+
+PauliX                  = { properties = [ "controllable", "invertible" ] }
+PauliY                  = { properties = [ "controllable", "invertible" ] }
+PauliZ                  = { properties = [ "controllable", "invertible" ] }
+Hadamard                = { properties = [ "invertible" ] }
+S                       = { properties = [ "invertible" ] }
+CNOT                    = { properties = [ "invertible" ] }
+SWAP                    = { properties = [ "invertible" ] }
+ISWAP                   = { properties = [ "invertible" ] }
+PSWAP                   = { properties = [ "invertible" ] }
+CY                      = { properties = [ "invertible" ] }
+CZ                      = { properties = [ "invertible" ] }
+Identity                = { properties = [ "controllable", "invertible" ] }
+
+# Observables supported by the device for measurements. The observables defined
+# in this section should have the following format:
+#
+#   OBSERVABLE = { conditions = [ CONDS ] }
+#
+# where CONDS is zero or more comma separated quoted strings, same as above.
+#
+# CONDS: constraints on the support for each observable.
+#        - "analytic" or "finiteshots": if this observable is only supported in
+#          either analytic execution or with shots, respectively.
+#        - "terms-commute": if a composite operator is only supported under the
+#          condition that its terms commute.
+#
+[operators.observables]
+
+PauliX = {}
+PauliY = {}
+PauliZ = {}
+Identity = {}
+Prod = {}
+# Hadamard = {}
+# Hermitian = {}
+# Projector = {}
+# SparseHamiltonian = {}
+# Hamiltonian = {}
+# Sum = {}
+# SProd = {}
+# Exp = {}
+
+# Types of measurement processes supported on the device. The measurements in
+# this section should have the following format:
+#
+#   MEASUREMENT_PROCESS = { conditions = [ CONDS ] }
+#
+# where CONDS is zero or more comma separated quoted strings, same as above.
+#
+# CONDS: constraints on the support for each measurement process.
+#        - "analytic" or "finiteshots": if this measurement is only supported
+#          in either analytic execution or with shots, respectively.
+#
+[measurement_processes]
+
+ExpectationMP   = { conditions = [ "analytic" ] }
+VarianceMP      = { conditions = [ "analytic" ] }
+ProbabilityMP   = { conditions = [ "analytic" ] }
+StateMP         = { conditions = [ "analytic" ] }
+SampleMP        = { conditions = [ "finiteshots" ] }
+CountsMP        = { conditions = [ "finiteshots" ] }
+
+# Additional support that the device may provide that informs the compilation
+# process. All accepted fields and their default values are listed below.
+[compilation]
+
+# Whether the device is compatible with qjit.
+qjit_compatible = false
+
+# Whether the device requires run time generation of the quantum circuit.
+runtime_code_generation = false
+
+# Whether the device supports allocating and releasing qubits during execution.
+dynamic_qubit_management = false
+
+# The methods of handling mid-circuit measurements that the device supports,
+# e.g., "one-shot", "tree-traversal", "device", etc. An empty list indicates
+# that the device does not support mid-circuit measurements.
+supported_mcm_methods = [ "device", "one-shot" ]
