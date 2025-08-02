@@ -110,7 +110,6 @@ class QrackStabilizerDevice(QubitDevice):
         self.shots = shots
         self._state = QrackStabilizer(self.num_wires)
         self.device_kwargs = {}
-        self._circuit = []
 
     def _reverse_state(self):
         end = self.num_wires - 1
@@ -119,22 +118,7 @@ class QrackStabilizerDevice(QubitDevice):
             self._state.swap(i, end - i)
 
     def apply(self, operations, **kwargs):
-        """Apply the circuit operations to the state.
-
-        This method serves as an auxiliary method to :meth:`~.QrackDevice.apply`.
-
-        Args:
-            operations (List[pennylane.Operation]): operations to be applied
-        """
-
-        self._circuit = self._circuit + operations
-        if self.noise == 0:
-            self._apply()
-            self._circuit = []
-        # else: Defer application until shots or expectation values are requested
-
-    def _apply(self):
-        for op in self._circuit:
+        for op in operations:
             if isinstance(op, BasisState):
                 self._apply_basis_state(op)
             else:
@@ -288,15 +272,6 @@ class QrackStabilizerDevice(QubitDevice):
                 "The number of shots has to be explicitly set on the device "
                 "when using sample-based measurements."
             )
-
-        if self.noise != 0:
-            samples = []
-            for _ in range(self.shots):
-                self._state.reset_all()
-                self._apply()
-                samples.append(self._generate_sample())
-            self._samples = QubitDevice.states_to_binary(np.array(samples), self.num_wires)
-            self._circuit = []
 
             return self._samples
 
