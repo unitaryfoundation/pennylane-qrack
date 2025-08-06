@@ -29,7 +29,7 @@ jobs:
       - name: Prepare Build Environment (Linux)
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential cmake ocl-icd-opencl-dev opencl-headers python3-venv ninja-build libomp-dev
+          sudo apt-get install -y build-essential cmake ocl-icd-opencl-dev opencl-headers python3-venv ninja-build libomp-dev libboost-dev
 
       - name: Install Python Dependencies
         run: |
@@ -72,7 +72,7 @@ jobs:
       - name: Prepare Build Environment (Linux)
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential cmake ocl-icd-opencl-dev opencl-headers python3-venv ninja-build libomp-dev
+          sudo apt-get install -y build-essential cmake ocl-icd-opencl-dev opencl-headers python3-venv ninja-build libomp-dev libboost-dev
 
       - name: Install Python Dependencies
         run: |
@@ -128,7 +128,7 @@ jobs:
       - name: Prepare Build Environment (MacOS)
         run: |
           brew upgrade
-          brew install cmake ninja libomp numpy virtualenv
+          brew install cmake ninja libomp numpy virtualenv boost
 
       - name: Build Wheel
         run: |
@@ -179,7 +179,7 @@ jobs:
       - name: Prepare Build Environment (MacOS)
         run: |
           brew upgrade
-          brew install cmake ninja libomp numpy virtualenv
+          brew install cmake ninja libomp numpy virtualenv boost
 
       - name: Build Wheel
         run: |
@@ -198,7 +198,7 @@ jobs:
           path: dist/
 
   build_windows:
-    runs-on: windows-latest  # Use a Linux runner
+    runs-on: windows-latest  # Use a Windows runner
     strategy:
       matrix:
         platform:
