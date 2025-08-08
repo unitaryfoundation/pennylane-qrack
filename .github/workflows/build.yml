@@ -218,6 +218,10 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install wheel setuptools
 
+      - name: Install vcpkg dependencies
+        run: |
+          vcpkg install opencl boost
+
       - name: Build Wheel
         run: |
           pip install -r requirements.txt
