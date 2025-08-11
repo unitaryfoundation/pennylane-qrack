@@ -246,7 +246,7 @@ class QrackStabilizerDevice(QubitDevice):
             if None not in b:
                 # This will trigger Gaussian elimination,
                 # so it only happens once.
-                self._state.try_separate(0)
+                self._state.try_separate_1qb(0)
                 # It's cheap to clone a stabilizer,
                 # but we don't want to have to transform
                 # back after terminal measurement.
