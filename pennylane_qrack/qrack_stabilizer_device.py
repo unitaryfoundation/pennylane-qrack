@@ -244,13 +244,13 @@ class QrackStabilizerDevice(QubitDevice):
                 b = [self._observable_map[observable.name]]
 
             if None not in b:
+                # This will trigger Gaussian elimination,
+                # so it only happens once.
+                self._state.try_separate(0)
                 # It's cheap to clone a stabilizer,
                 # but we don't want to have to transform
                 # back after terminal measurement.
-                state_clone = _state.clone()
-                # This will trigger Gaussian elimination,
-                # so it only happens once.
-                state_clone.try_separate(0)
+                state_clone = self._state.clone()
 
                 q = self.map_wires(observable.wires)
                 for qb, base in zip(q, b):
