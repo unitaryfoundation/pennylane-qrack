@@ -248,6 +248,10 @@ class QrackStabilizerDevice(QubitDevice):
                 # but we don't want to have to transform
                 # back after terminal measurement.
                 state_clone = _state.clone()
+                # This will trigger Gaussian elimination,
+                # so it only happens once.
+                state_clone.try_separate(0)
+
                 q = self.map_wires(observable.wires)
                 for qb, base in zip(q, b):
                     match base:
