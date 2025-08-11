@@ -244,7 +244,20 @@ class QrackStabilizerDevice(QubitDevice):
                 b = [self._observable_map[observable.name]]
 
             if None not in b:
+                # It's cheap to clone a stabilizer,
+                # but we don't want to have to transform
+                # back after terminal measurement.
+                state_clone = _state.clone()
                 q = self.map_wires(observable.wires)
+                for qb, base in zip(q, b):
+                    match base:
+                        case Pauli.PauliX:
+                            state_clone.h(qb)
+                        case Pauli.PauliY:
+                            state_clone.adjs(qb)
+                            state_clone.h(qb)
+                b = [Pauli.PauliZ] * len(b)
+
                 return self._state.pauli_expectation(q, b)
 
             # exact expectation value
