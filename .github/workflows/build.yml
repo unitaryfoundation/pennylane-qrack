@@ -224,7 +224,7 @@ jobs:
           BOOST_INCLUDEDIR: C:/vcpkg/installed/x64-windows/include
           BOOST_LIBRARYDIR: C:/vcpkg/installed/x64-windows/lib
         run: |
-          vcpkg install opencl boost
+          vcpkg install opencl boost-dynamic-bitset
 
       - name: Build Wheel
         run: |
