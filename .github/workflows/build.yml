@@ -219,6 +219,10 @@ jobs:
           python -m pip install wheel setuptools
 
       - name: Install vcpkg dependencies
+        env:
+          BOOST_ROOT: C:/vcpkg/installed/x64-windows
+          BOOST_INCLUDEDIR: C:/vcpkg/installed/x64-windows/include
+          BOOST_LIBRARYDIR: C:/vcpkg/installed/x64-windows/lib
         run: |
           vcpkg install opencl boost
 
@@ -227,6 +231,7 @@ jobs:
           pip install -r requirements.txt
           pip install .
           python setup.py bdist_wheel --plat-name=${{ matrix.platform }}
+
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
