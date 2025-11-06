@@ -128,7 +128,7 @@ jobs:
       - name: Prepare Build Environment (MacOS)
         run: |
           brew upgrade
-          brew install cmake ninja libomp numpy virtualenv boost g++
+          brew install cmake ninja libomp numpy virtualenv boost gcc
 
       - name: Build Wheel
         run: |
@@ -179,7 +179,7 @@ jobs:
       - name: Prepare Build Environment (MacOS)
         run: |
           brew upgrade
-          brew install cmake ninja libomp numpy virtualenv boost g++
+          brew install cmake ninja libomp numpy virtualenv boost gcc
 
       - name: Build Wheel
         run: |
