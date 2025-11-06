@@ -6,7 +6,7 @@
 #define CL_HPP_TARGET_OPENCL_VERSION 300
 #include "qrack/qfactory.hpp"
 
-#define QSIM_CONFIG(numQubits) Qrack::CreateArrangedLayersFull(nw, md, sd, sh, bdt, pg, tn, hy, oc, numQubits, Qrack::ZERO_BCI, nullptr, Qrack::CMPLX_DEFAULT_ARG, false, true, hp)
+#define QSIM_CONFIG(numQubits) Qrack::CreateArrangedLayersFull(nw, md, sd, sh, bdt, pg, tn, hy, oc, numQubits, Qrack::ZERO_BCI, nullptr, Qrack::CMPLX_DEFAULT_ARG, false, true, hp, sp)
 
 std::string trim(std::string s)
 {
@@ -41,6 +41,7 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
     bool pg;
     bool hy;
     bool hp;
+    bool sp;
     bool nw;
     size_t shots;
     Qrack::real1_f noise_param;
@@ -391,6 +392,7 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
         , pg(false)
         , hy(false)
         , hp(false)
+        , sp(false)
         , nw(false)
         , shots(1U)
         , noise_param(ZERO_R1_F)
@@ -412,7 +414,8 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
         keyMap["'is_paged'"] = 7;
         keyMap["'is_hybrid_cpu_gpu'"] = 8;
         keyMap["'is_host_pointer'"] =9;
-        keyMap["'noise'"] = 10;
+        keyMap["'is_sparse'"] =10;
+        keyMap["'noise'"] = 11;
 
         size_t pos;
         while ((pos = kwargs.find(":")) != std::string::npos) {
@@ -451,6 +454,9 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
                     hp = val;
                     break;
                 case 10:
+                    sp = val;
+                    break;
+                case 11:
                     noise_param = std::stof(value);
                     nw = noise_param > ZERO_R1;
                     break;
@@ -553,12 +559,10 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
         // Deallocate
         qsim->Dispose(id, 1U);
     }
-    void ReleaseAllQubits() override
+    void ReleaseQubits(const std::vector<QubitIdType> &qubits) override
     {
-        // State vector is left empty
-        qsim = QSIM_CONFIG(0U);
-        if (noise_param > ZERO_R1) {
-            qsim->SetNoiseParameter(noise_param);
+        for (const QubitIdType& q : qubits) {
+            ReleaseQubit(q);
         }
     }
     [[nodiscard]] auto GetNumQubits() const -> size_t override
