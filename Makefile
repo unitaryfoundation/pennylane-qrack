@@ -42,7 +42,7 @@ else
 endif
 endif
 endif
-	mkdir _qrack_include; mkdir _qrack_include/qrack; cp -r qrack/include/* _qrack_include/qrack; cp -r qrack/build/include/* _qrack_include/qrack; \
+	rm -rf _qrack_include; mkdir _qrack_include; mkdir _qrack_include/qrack; cp -r qrack/include/* _qrack_include/qrack; cp -r qrack/build/include/* _qrack_include/qrack; \
 	cd pennylane_qrack; cmake ..; make all
 
 .PHONY: install
