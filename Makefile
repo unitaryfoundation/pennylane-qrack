@@ -36,11 +36,7 @@ endif
 endif
 ifeq ($(UNAME_S),Darwin)
 ifeq ($(UNAME_P),x86_64)
-<<<<<<< Updated upstream
-	cd qrack/build; cmake -DENABLE_RDRAND=OFF -DQBCAPPOW=11 -DCPP_STD=14 -DBoost_INCLUDE_DIR=/opt/homebrew/include -DBoost_LIBRARY_DIRS=/opt/homebrew/lib ..; make qrack; cd ../..
-=======
-	cd qrack/build; cmake -DCMAKE_CXX_COMPILER=/opt/homebrew/bin/g++ -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DQBCAPPOW=11 -DCPP_STD=14 -DBoost_INCLUDE_DIR=/opt/homebrew/include -DBoost_LIBRARY_DIRS=/opt/homebrew/lib ..; make qrack; cd ../..
->>>>>>> Stashed changes
+	cd qrack/build; cmake -DCMAKE_CXX_COMPILER=/opt/homebrew/bin/g++  -DENABLE_RDRAND=OFF -DQBCAPPOW=11 -DCPP_STD=14 -DBoost_INCLUDE_DIR=/opt/homebrew/include -DBoost_LIBRARY_DIRS=/opt/homebrew/lib ..; make qrack; cd ../..
 else
 	cd qrack/build; cmake -DCMAKE_CXX_COMPILER=/opt/homebrew/bin/g++ -DENABLE_OPENCL=OFF -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DENABLE_RDRAND=OFF -DQBCAPPOW=11 -DCPP_STD=14 -DBoost_INCLUDE_DIR=/opt/homebrew/include -DBoost_LIBRARY_DIRS=/opt/homebrew/lib ..; make qrack; cd ../..
 endif
