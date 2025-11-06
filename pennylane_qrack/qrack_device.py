@@ -168,6 +168,8 @@ class QrackDevice(QubitDevice):
     isCpuGpuHybrid = True
     # Allocate GPU buffer from general host heap? (Default is "false"; "true" might improve performance or reliability in certain cases, like if using an Intel HD as accelerator)
     isHostPointer = True if os.environ.get("PYQRACK_HOST_POINTER_DEFAULT_ON") else False
+    # For CPU-based simulation, use sparse state vectors (Default is "false")
+    isSparse = False
     # Noise parameter. (Default is "0"; depolarizing noise intensity can also be controlled by "QRACK_GATE_DEPOLARIZATION" environment variable)
     noise = 0
 
@@ -201,6 +203,8 @@ class QrackDevice(QubitDevice):
             self.isCpuGpuHybrid = options["isCpuGpuHybrid"]
         if "isHostPointer" in options:
             self.isHostPointer = options["isHostPointer"]
+        if "isSparse" in options:
+            self.isSparse = options["isSparse"]
         if "noise" in options:
             self.noise = options["noise"]
             if (self.noise != 0) and (shots is None):
@@ -216,6 +220,7 @@ class QrackDevice(QubitDevice):
             isOpenCL=self.isOpenCL,
             isCpuGpuHybrid=self.isCpuGpuHybrid,
             isHostPointer=self.isHostPointer,
+            isSparse=self.isSparse,
             noise=self.noise,
         )
         self.device_kwargs = {
@@ -228,6 +233,7 @@ class QrackDevice(QubitDevice):
             "is_paged": self.isPaged,
             "is_hybrid_cpu_gpu": self.isCpuGpuHybrid,
             "is_host_pointer": self.isHostPointer,
+            "is_sparse": self.isSparse,
             "noise": self.noise,
         }
         self._circuit = []
