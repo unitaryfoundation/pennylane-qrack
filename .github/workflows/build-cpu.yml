@@ -24,7 +24,7 @@ jobs:
         with:
           repository: 'PennyLaneAI/catalyst'
           path: catalyst
-          ref: 6fc5e13973456b32c85915737ccaed55ea6ab31c
+          ref: 0eaf6999746cf6c267a8ec271ef53ee24e6a65d4
 
       - name: Prepare Build Environment (Linux)
         run: |
@@ -67,7 +67,7 @@ jobs:
         with:
           repository: 'PennyLaneAI/catalyst'
           path: catalyst
-          ref: 6fc5e13973456b32c85915737ccaed55ea6ab31c
+          ref: 0eaf6999746cf6c267a8ec271ef53ee24e6a65d4
 
       - name: Prepare Build Environment (Linux)
         run: |
