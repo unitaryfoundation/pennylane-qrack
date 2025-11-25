@@ -36,15 +36,15 @@ endif
 endif
 ifeq ($(UNAME_S),Darwin)
 ifeq ($(UNAME_P),x86_64)
-	cd qrack/build; cmake -DCMAKE_OSX_ARCHITECTURES="arm64" -DQBCAPPOW=11 -DBoost_INCLUDE_DIR=/opt/homebrew/include -DBoost_LIBRARY_DIRS=/opt/homebrew/lib ..; make qrack; cd ../..
+	cd qrack/build; cmake -DCMAKE_OSX_ARCHITECTURES="arm64" -DQBCAPPOW=11 -DBoost_INCLUDE_DIR=/opt/homebrew/include -DBoost_LIBRARY_DIRS=/opt/homebrew/lib ..;  cmake --build . --target qrack; cd ../..
 else
-	cd qrack/build; cmake -DCMAKE_OSX_ARCHITECTURES="arm64" -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=11 -DBoost_INCLUDE_DIR=/opt/homebrew/include -DBoost_LIBRARY_DIRS=/opt/homebrew/lib ..; make qrack; cd ../..
+	cd qrack/build; cmake -DCMAKE_OSX_ARCHITECTURES="arm64" -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=11 -DBoost_INCLUDE_DIR=/opt/homebrew/include -DBoost_LIBRARY_DIRS=/opt/homebrew/lib ..; cmake --build . --target qrack; cd ../..
 endif
 endif
 endif
 	mkdir -p _qrack_include; mkdir -p _qrack_include/qrack; cp -r qrack/include/* _qrack_include/qrack; cp -r qrack/build/include/* _qrack_include/qrack
 ifeq ($(UNAME_S),Darwin)
-	cd pennylane_qrack; cmake -DCMAKE_OSX_ARCHITECTURES="arm64" -DCMAKE_CXX_COMPILER=/opt/homebrew/bin/g++-14 ..; make all
+	cd pennylane_qrack; cmake -DCMAKE_OSX_ARCHITECTURES="arm64" -DCMAKE_CXX_COMPILER=/opt/homebrew/bin/g++-14 ..;  cmake --build . --target all
 else
 	cd pennylane_qrack; cmake ..; make all
 endif
