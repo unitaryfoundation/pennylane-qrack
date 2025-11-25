@@ -5,19 +5,19 @@ project(qrack_device)
 if (NOT MSVC)
     set(CMAKE_CXX_STANDARD 20)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
-    set(QRACK_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/qrack/build")
-
     if (APPLE)
-        find_library(QRACK_LIB NAMES qrack libqrack)
+        set(QRACK_DIR "/usr/local/lib/qrack")
     else (APPLE)
-        find_library(QRACK_LIB
-            NAMES qrack libqrack
-            PATHS "${QRACK_BUILD_DIR}"
-            NO_DEFAULT_PATH)
+        set(QRACK_DIR "${CMAKE_CURRENT_SOURCE_DIR}/qrack/build")
     endif (APPLE)
 
+    find_library(QRACK_LIB
+        NAMES qrack libqrack
+        PATHS "${QRACK_DIR}"
+        NO_DEFAULT_PATH)
+
     if (NOT QRACK_LIB)
-        message(FATAL_ERROR "Could not find libqrack in ${QRACK_BUILD_DIR}")
+        message(FATAL_ERROR "Could not find libqrack in ${QRACK_DIR}")
     endif (NOT QRACK_LIB)
 
     message(STATUS "Found Qrack library: ${QRACK_LIB}")
