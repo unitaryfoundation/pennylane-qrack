@@ -24,7 +24,7 @@ if (NOT MSVC)
 
     add_library(qrack_device SHARED pennylane_qrack/qrack_device.cpp)
     if (APPLE)
-        target_link_directories(qrack_device PUBLIC ${CMAKE_SOURCE_DIR}/catalyst/runtime/include)
+        target_link_directories(qrack_device PUBLIC ${CMAKE_SOURCE_DIR}/catalyst/runtime/include /usr/local/lib/qrack)
         target_include_directories(qrack_device PUBLIC ${CMAKE_SOURCE_DIR}/catalyst/runtime/include /usr/local/include)
     else (APPLE)
         target_link_directories(qrack_device PUBLIC ${CMAKE_SOURCE_DIR}/catalyst/runtime/include ${CMAKE_SOURCE_DIR}/qrack/build)
