@@ -7,6 +7,10 @@ if (NOT MSVC)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
     set(QRACK_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/qrack/build")
 
+    if (APPLE)
+        add_link_options("-Wl,-ld_classic")
+    endif(APPLE)
+
     find_library(QRACK_LIB
         NAMES qrack libqrack
         PATHS "${QRACK_BUILD_DIR}"
