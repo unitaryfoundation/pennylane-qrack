@@ -7,10 +7,6 @@ if (NOT MSVC)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
     set(QRACK_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/qrack/build")
 
-    if (APPLE)
-        add_link_options("-Wl,-ld_classic")
-    endif(APPLE)
-
     find_library(QRACK_LIB
         NAMES qrack libqrack
         PATHS "${QRACK_BUILD_DIR}"
@@ -22,24 +18,7 @@ if (NOT MSVC)
 
     message(STATUS "Found Qrack library: ${QRACK_LIB}")
 
-    option(ENABLE_OPENCL "Use OpenCL optimizations" ON)
-    find_package(OpenCL)
-    if ((NOT OpenCL_FOUND) OR (APPLE AND NOT ((${CMAKE_SYSTEM_PROCESSOR} MATCHES "^amd") OR (${CMAKE_SYSTEM_PROCESSOR} MATCHES "^x86_64"))))
-        set (ENABLE_OPENCL OFF)
-    endif ((NOT OpenCL_FOUND) OR (APPLE AND NOT ((${CMAKE_SYSTEM_PROCESSOR} MATCHES "^amd") OR (${CMAKE_SYSTEM_PROCESSOR} MATCHES "^x86_64"))))
-    add_library(qrack_device SHARED pennylane_qrack/qrack_device.cpp)
-    target_link_directories(qrack_device PUBLIC ${CMAKE_SOURCE_DIR}/catalyst/runtime/include ${CMAKE_SOURCE_DIR}/qrack/build)
-    target_include_directories(qrack_device PUBLIC ${CMAKE_SOURCE_DIR}/catalyst/runtime/include ${CMAKE_SOURCE_DIR}/_qrack_include)
-    if (ENABLE_OPENCL)
-        if (APPLE)
-            target_include_directories(qrack_device PUBLIC ${CMAKE_SOURCE_DIR}/qrack/build/_deps/opencl-headers-src/ ${CMAKE_SOURCE_DIR}/qrack/build/_deps/opencl-clhpp-src/include/)
-            target_link_libraries(qrack_device PUBLIC ${QRACK_LIB} "-framework OpenCL")
-        else (APPLE)
-            target_link_libraries(qrack_device PUBLIC ${QRACK_LIB} OpenCL)
-        endif (APPLE)
-    else (ENABLE_OPENCL)
-        target_link_libraries(qrack_device PUBLIC ${QRACK_LIB})
-    endif (ENABLE_OPENCL)
+    target_link_libraries(qrack_device PUBLIC ${QRACK_LIB})
     set_property(TARGET qrack_device PROPERTY POSITION_INDEPENDENT_CODE ON)
     install(TARGETS qrack_device LIBRARY DESTINATION pennylane_qrack)
 endif (NOT MSVC)
