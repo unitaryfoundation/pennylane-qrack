@@ -18,6 +18,9 @@ if (NOT MSVC)
 
     message(STATUS "Found Qrack library: ${QRACK_LIB}")
 
+    add_library(qrack_device SHARED pennylane_qrack/qrack_device.cpp)
+    target_link_directories(qrack_device PUBLIC ${CMAKE_SOURCE_DIR}/catalyst/runtime/include ${CMAKE_SOURCE_DIR}/qrack/build)
+    target_include_directories(qrack_device PUBLIC ${CMAKE_SOURCE_DIR}/catalyst/runtime/include ${CMAKE_SOURCE_DIR}/_qrack_include)
     target_link_libraries(qrack_device PUBLIC ${QRACK_LIB})
     set_property(TARGET qrack_device PROPERTY POSITION_INDEPENDENT_CODE ON)
     install(TARGETS qrack_device LIBRARY DESTINATION pennylane_qrack)
