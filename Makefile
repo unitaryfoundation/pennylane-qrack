@@ -24,7 +24,7 @@ help:
 build-deps:
 ifneq ($(OS),Windows_NT)
 ifeq ($(QRACK_PRESENT),)
-	git clone https://github.com/unitaryfund/qrack.git; cd qrack; git checkout b4356a13c230ebba7d75fc3f45a4a7c5344a20f2; cd ..
+	git clone https://github.com/unitaryfund/qrack.git; cd qrack; git checkout fdae3a5d033441b1c02696fc43050de947598618; cd ..
 endif
 	mkdir -p qrack/build
 ifeq ($(UNAME_S),Linux)
@@ -36,18 +36,14 @@ endif
 endif
 ifeq ($(UNAME_S),Darwin)
 ifeq ($(UNAME_P),x86_64)
-	cd qrack/build; cmake -DCMAKE_OSX_ARCHITECTURES="arm64" -DQBCAPPOW=11 -DBoost_INCLUDE_DIR=/opt/homebrew/include -DBoost_LIBRARY_DIRS=/opt/homebrew/lib ..;  cmake --build . --target qrack; cd ../..
+	cd qrack/build; cmake -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm/bin/clang -DCMAKE_LINKER=/opt/homebrew/opt/llvm/bin/ld.lld -DQBCAPPOW=11 -DBoost_INCLUDE_DIR=/opt/homebrew/include -DBoost_LIBRARY_DIRS=/opt/homebrew/lib ..;  cmake --build . --target qrack; cd ../..
 else
-	cd qrack/build; cmake -DCMAKE_OSX_ARCHITECTURES="arm64" -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=11 -DBoost_INCLUDE_DIR=/opt/homebrew/include -DBoost_LIBRARY_DIRS=/opt/homebrew/lib ..; cmake --build . --target qrack; cd ../..
+	cd qrack/build; cmake -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm/bin/clang -DCMAKE_LINKER=/opt/homebrew/opt/llvm/bin/ld.lld -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=11 -DBoost_INCLUDE_DIR=/opt/homebrew/include -DBoost_LIBRARY_DIRS=/opt/homebrew/lib ..; cmake --build . --target qrack; cd ../..
 endif
 endif
 endif
 	mkdir -p _qrack_include; mkdir -p _qrack_include/qrack; cp -r qrack/include/* _qrack_include/qrack; cp -r qrack/build/include/* _qrack_include/qrack
-ifeq ($(UNAME_S),Darwin)
-	cd pennylane_qrack; cmake -DCMAKE_OSX_ARCHITECTURES="arm64" -DCMAKE_CXX_COMPILER=/opt/homebrew/bin/g++-14 ..;  cmake --build . --target all
-else
-	cd pennylane_qrack; cmake ..; make all
-endif
+	cd pennylane_qrack; cmake ..;  cmake --build . --target all
 
 .PHONY: install
 install:
