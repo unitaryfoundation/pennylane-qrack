@@ -24,7 +24,7 @@ help:
 build-deps:
 ifneq ($(OS),Windows_NT)
 ifeq ($(QRACK_PRESENT),)
-	git clone https://github.com/unitaryfund/qrack.git; cd qrack; git checkout b3f6830054f24e7eb54925907b7888f163e8f24f; cd ..
+	git clone https://github.com/unitaryfund/qrack.git; cd qrack; git checkout 154b8eb5366d00da454b943be14b834abc721ecd; cd ..
 endif
 	mkdir -p qrack/build
 ifeq ($(UNAME_S),Linux)
@@ -36,9 +36,9 @@ endif
 endif
 ifeq ($(UNAME_S),Darwin)
 ifeq ($(UNAME_P),x86_64)
-	cd qrack/build; cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm/bin/clang -DCMAKE_LINKER=/opt/homebrew/opt/llvm/bin/ld.lld -DQBCAPPOW=11 -DBoost_INCLUDE_DIR=/opt/homebrew/include -DBoost_LIBRARY_DIRS=/opt/homebrew/lib ..;  make install; cd ../..
+	cd qrack/build; cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm/bin/clang -DCMAKE_LINKER=/opt/homebrew/opt/llvm/bin/ld.lld -DQBCAPPOW=11 -DBoost_INCLUDE_DIR=/opt/homebrew/include -DBoost_LIBRARY_DIRS=/opt/homebrew/lib ..;  make qrack; cd ../..
 else
-	cd qrack/build; cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm/bin/clang -DCMAKE_LINKER=/opt/homebrew/opt/llvm/bin/ld.lld -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=11 -DBoost_INCLUDE_DIR=/opt/homebrew/include -DBoost_LIBRARY_DIRS=/opt/homebrew/lib ..; make install; cd ../..
+	cd qrack/build; cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm/bin/clang -DCMAKE_LINKER=/opt/homebrew/opt/llvm/bin/ld.lld -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=11 -DBoost_INCLUDE_DIR=/opt/homebrew/include -DBoost_LIBRARY_DIRS=/opt/homebrew/lib ..; make qrack; cd ../..
 endif
 endif
 endif

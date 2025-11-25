@@ -137,7 +137,7 @@ jobs:
           source venv/bin/activate
           pip3 install --upgrade wheel setuptools
           pip3 install -r requirements.txt
-          sudo pip3 install .
+          pip3 install .
           python setup.py bdist_wheel --plat-name=${{ matrix.platform }}
 
       - name: Upload Artifacts
@@ -188,7 +188,7 @@ jobs:
           source venv/bin/activate
           pip3 install --upgrade wheel setuptools
           pip3 install -r requirements.txt
-          sudo pip3 install .
+          pip3 install .
           python setup.py bdist_wheel --plat-name=${{ matrix.platform }}
 
       - name: Upload Artifacts
