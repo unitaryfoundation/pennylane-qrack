@@ -7,14 +7,18 @@ if (NOT MSVC)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
     set(QRACK_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/qrack/build")
 
-    find_library(QRACK_LIB
-        NAMES qrack libqrack
-        PATHS "${QRACK_BUILD_DIR}"
-        NO_DEFAULT_PATH)
+    if (APPLE)
+        find_library(QRACK_LIB NAMES qrack libqrack)
+    else (APPLE)
+        find_library(QRACK_LIB
+            NAMES qrack libqrack
+            PATHS "${QRACK_BUILD_DIR}"
+            NO_DEFAULT_PATH)
+    endif (APPLE)
 
     if (NOT QRACK_LIB)
         message(FATAL_ERROR "Could not find libqrack in ${QRACK_BUILD_DIR}")
-    endif ()
+    endif (NOT QRACK_LIB)
 
     message(STATUS "Found Qrack library: ${QRACK_LIB}")
 
