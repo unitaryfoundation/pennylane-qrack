@@ -22,7 +22,7 @@ help:
 
 .PHONY: build-deps
 build-deps:
-ifeq ($(UNAME_S),Darwin)
+ifneq ($(UNAME_S),Darwin)
 ifneq ($(OS),Windows_NT)
 ifeq ($(QRACK_PRESENT),)
 	git clone https://github.com/unitaryfund/qrack.git; cd qrack; git checkout 154b8eb5366d00da454b943be14b834abc721ecd; cd ..
@@ -44,11 +44,11 @@ endif
 # endif
 endif
 	mkdir -p _qrack_include/qrack; cp -r qrack/include/* _qrack_include/qrack; cp -r qrack/build/include/* _qrack_include/qrack
-ifeq ($(UNAME_S),Darwin)
-	cd pennylane_qrack; cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm/bin/clang -DCMAKE_LINKER=/opt/homebrew/opt/llvm/bin/ld.lld ..;  cmake --build . --target all
-else
-	cd pennylane_qrack; cmake ..;  cmake --build . --target all
-endif
+# ifeq ($(UNAME_S),Darwin)
+# 	cd pennylane_qrack; cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm/bin/clang -DCMAKE_LINKER=/opt/homebrew/opt/llvm/bin/ld.lld ..;  make all
+# else
+	cd pennylane_qrack; cmake ..;  make all
+# endif
 endif
 
 .PHONY: install
