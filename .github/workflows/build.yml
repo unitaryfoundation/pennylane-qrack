@@ -143,6 +143,10 @@ jobs:
           make qrack_pinvoke
           sudo make install
           cd ../..
+          cd pennylane_qrack
+          cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm/bin/clang -DCMAKE_LINKER=/opt/homebrew/opt/llvm/bin/ld.lld ..
+          cmake --build . --target all
+          cd ..
           pip3 install .
           python setup.py bdist_wheel --plat-name=${{ matrix.platform }}
 
@@ -200,6 +204,10 @@ jobs:
           make qrack_pinvoke
           sudo make install
           cd ../..
+          cd pennylane_qrack
+          cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm/bin/clang -DCMAKE_LINKER=/opt/homebrew/opt/llvm/bin/ld.lld ..
+          cmake --build . --target all
+          cd ..
           pip3 install .
           python setup.py bdist_wheel --plat-name=${{ matrix.platform }}
 
