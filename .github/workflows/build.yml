@@ -137,7 +137,11 @@ jobs:
           source venv/bin/activate
           pip3 install --upgrade wheel setuptools
           pip3 install -r requirements.txt
-          sudo pip3 install .
+          cd qrack/build
+          cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm/bin/clang -DCMAKE_LINKER=/opt/homebrew/opt/llvm/bin/ld.lld -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=11 ..
+          sudo make install
+          cd ../..
+          pip3 install .
           python setup.py bdist_wheel --plat-name=${{ matrix.platform }}
 
       - name: Upload Artifacts
@@ -188,7 +192,11 @@ jobs:
           source venv/bin/activate
           pip3 install --upgrade wheel setuptools
           pip3 install -r requirements.txt
-          sudo pip3 install .
+          cd qrack/build
+          cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm/bin/clang -DCMAKE_LINKER=/opt/homebrew/opt/llvm/bin/ld.lld -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=11 ..
+          sudo make install
+          cd ../..
+          pip3 install .
           python setup.py bdist_wheel --plat-name=${{ matrix.platform }}
 
       - name: Upload Artifacts
