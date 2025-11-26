@@ -42,7 +42,7 @@ endif
 # endif
 # endif
 endif
-        mkdir -p _qrack_include/qrack; cp -r qrack/include/* _qrack_include/qrack; cp -r qrack/build/include/* _qrack_include/qrack
+	mkdir -p _qrack_include/qrack; cp -r qrack/include/* _qrack_include/qrack; cp -r qrack/build/include/* _qrack_include/qrack
 ifeq ($(UNAME_S),Darwin)
 	cd pennylane_qrack; cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm/bin/clang -DCMAKE_LINKER=/opt/homebrew/opt/llvm/bin/ld.lld ..;  cmake --build . --target all
 else
