@@ -39,12 +39,22 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install wheel setuptools PennyLane-Catalyst
 
+      - name: Detect manylinux tag
+        id: abi
+        run: |
+          GLIBC_VER=$(ldd --version | head -n1 | grep -oE '[0-9]+\.[0-9]+$')
+          MAJOR=$(echo $GLIBC_VER | cut -d. -f1)
+          MINOR=$(echo $GLIBC_VER | cut -d. -f2)
+          PLATFORM_TAG="manylinux_${MAJOR}_${MINOR}_x86_64"
+          echo "Detected platform: $PLATFORM_TAG"
+          echo "platform=$PLATFORM_TAG" >> $GITHUB_OUTPUT
+
       - name: Build Wheel
         run: |
           source venv/bin/activate
           pip install -r requirements.txt
           pip install .
-          python setup.py bdist_wheel --plat-name=${{ matrix.platform }}
+          python setup.py bdist_wheel --plat-name=${{ steps.abi.outputs.platform }}
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
@@ -82,12 +92,22 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install wheel setuptools PennyLane-Catalyst
 
+      - name: Detect manylinux tag
+        id: abi
+        run: |
+          GLIBC_VER=$(ldd --version | head -n1 | grep -oE '[0-9]+\.[0-9]+$')
+          MAJOR=$(echo $GLIBC_VER | cut -d. -f1)
+          MINOR=$(echo $GLIBC_VER | cut -d. -f2)
+          PLATFORM_TAG="manylinux_${MAJOR}_${MINOR}_x86_64"
+          echo "Detected platform: $PLATFORM_TAG"
+          echo "platform=$PLATFORM_TAG" >> $GITHUB_OUTPUT
+
       - name: Build Wheel
         run: |
           source venv/bin/activate
           pip install -r requirements.txt
           pip install .
-          python setup.py bdist_wheel --plat-name=${{ matrix.platform }}
+          python setup.py bdist_wheel --plat-name=${{ steps.abi.outputs.platform }}
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
