@@ -561,6 +561,11 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
     }
     void ReleaseQubits(const std::vector<QubitIdType> &qubits) override
     {
+        if (qubits.size() == qsim->GetQubitCount()) {
+            qsim = QSIM_CONFIG(0U);
+            return;
+        }
+
         for (const QubitIdType& q : qubits) {
             ReleaseQubit(q);
         }
