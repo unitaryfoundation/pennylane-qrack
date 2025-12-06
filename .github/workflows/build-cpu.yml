@@ -53,13 +53,6 @@ jobs:
         run: |
           source venv/bin/activate
           pip install -r requirements.txt
-          pip uninstall -y pennylane
-          cd catalyst
-          pip install -r requirements.txt
-          git submodule init
-          git submodule update
-          make all
-          cd ..
           pip install .
           python setup.py bdist_wheel --plat-name=${{ steps.abi.outputs.platform }}
 
@@ -113,13 +106,6 @@ jobs:
         run: |
           source venv/bin/activate
           pip install -r requirements.txt
-          pip uninstall -y pennylane
-          cd catalyst
-          pip install -r requirements.txt
-          git submodule init
-          git submodule update
-          make all
-          cd ..
           pip install .
           python setup.py bdist_wheel --plat-name=${{ steps.abi.outputs.platform }}
 
