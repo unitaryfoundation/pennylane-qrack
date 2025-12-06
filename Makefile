@@ -24,14 +24,14 @@ help:
 build-deps:
 ifneq ($(OS),Windows_NT)
 ifeq ($(QRACK_PRESENT),)
-	git clone https://github.com/unitaryfund/qrack.git; cd qrack; git checkout e3bc198fafd215095574a0db2df8c17a790c0c91; cd ..
+	git clone https://github.com/unitaryfund/qrack.git; cd qrack; git checkout 177ae06d42c6b633031294b460b4522cd85ba00d; cd ..
 endif
 	mkdir -p qrack/build
 ifeq ($(UNAME_S),Linux)
 ifeq ($(UNAME_P),x86_64)
-	cd qrack/build; cmake -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_DEVRAND=ON -DQBCAPPOW=7 ..; make qrack; cd ../..
+	cd qrack/build; /usr/bin/cmake -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_DEVRAND=ON -DQBCAPPOW=7 ..; make qrack; cd ../..
 else
-	cd qrack/build; cmake -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_DEVRAND=ON -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=7 ..; make qrack; cd ../..
+	cd qrack/build; /usr/bin/cmake -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_DEVRAND=ON -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=7 ..; make qrack; cd ../..
 endif
 endif
 ifeq ($(UNAME_S),Darwin)
