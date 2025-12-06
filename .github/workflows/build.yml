@@ -9,6 +9,112 @@ on:
 
 
 jobs:
+  build_noble:
+    runs-on: ubuntu-24.04  # Use a Noble Numbat runner
+    strategy:
+      matrix:
+        platform:
+          - manylinux_2_39_x86_64
+    steps:
+      - name: Checkout PennyLane-Qrack
+        uses: actions/checkout@v4
+
+      - name: Checkout Catalyst
+        uses: actions/checkout@v4
+        with:
+          repository: 'PennyLaneAI/catalyst'
+          path: catalyst
+          ref: 0eaf6999746cf6c267a8ec271ef53ee24e6a65d4
+
+      - name: Prepare Build Environment (Linux)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake ocl-icd-opencl-dev opencl-headers python3-venv ninja-build libomp-dev
+
+      - name: Install Python Dependencies
+        run: |
+          mkdir venv
+          python -m venv venv
+          source venv/bin/activate
+          python -m pip install --upgrade pip
+          python -m pip install wheel setuptools cmake
+
+      - name: Detect manylinux tag
+        id: abi
+        run: |
+          GLIBC_VER=$(ldd --version | head -n1 | grep -oE '[0-9]+\.[0-9]+$')
+          MAJOR=$(echo $GLIBC_VER | cut -d. -f1)
+          MINOR=$(echo $GLIBC_VER | cut -d. -f2)
+          PLATFORM_TAG="manylinux_${MAJOR}_${MINOR}_x86_64"
+          echo "Detected platform: $PLATFORM_TAG"
+          echo "platform=$PLATFORM_TAG" >> $GITHUB_OUTPUT
+
+      - name: Build Wheel
+        run: |
+          source venv/bin/activate
+          pip install -r requirements.txt
+          pip install .
+          python setup.py bdist_wheel --plat-name=${{ steps.abi.outputs.platform }}
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pennylane_qrack-${{ matrix.platform }}
+          path: dist/
+
+  build_jammy:
+    runs-on: ubuntu-22.04  # Use a Jammy Jellyfish runner
+    strategy:
+      matrix:
+        platform:
+          - manylinux_2_35_x86_64
+    steps:
+      - name: Checkout PennyLane-Qrack
+        uses: actions/checkout@v4
+
+      - name: Checkout Catalyst
+        uses: actions/checkout@v4
+        with:
+          repository: 'PennyLaneAI/catalyst'
+          path: catalyst
+          ref: 0eaf6999746cf6c267a8ec271ef53ee24e6a65d4
+
+      - name: Prepare Build Environment (Linux)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake ocl-icd-opencl-dev opencl-headers python3-venv ninja-build libomp-dev python3.11-venv python3.11-dev
+
+      - name: Install Python Dependencies
+        run: |
+          mkdir venv
+          python3.11 -m venv venv venv
+          source venv/bin/activate
+          python -m pip install --upgrade pip
+          python -m pip install wheel setuptools cmake
+
+      - name: Detect manylinux tag
+        id: abi
+        run: |
+          GLIBC_VER=$(ldd --version | head -n1 | grep -oE '[0-9]+\.[0-9]+$')
+          MAJOR=$(echo $GLIBC_VER | cut -d. -f1)
+          MINOR=$(echo $GLIBC_VER | cut -d. -f2)
+          PLATFORM_TAG="manylinux_${MAJOR}_${MINOR}_x86_64"
+          echo "Detected platform: $PLATFORM_TAG"
+          echo "platform=$PLATFORM_TAG" >> $GITHUB_OUTPUT
+
+      - name: Build Wheel
+        run: |
+          source venv/bin/activate
+          pip install -r requirements.txt
+          pip install .
+          python setup.py bdist_wheel --plat-name=${{ steps.abi.outputs.platform }}
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pennylane_qrack-${{ matrix.platform }}
+          path: dist/
+
   build_mac_15:
     runs-on: macos-15  # Use a Mac OS runner
     strategy:
@@ -51,16 +157,6 @@ jobs:
           source venv/bin/activate
           pip3 install --upgrade wheel setuptools
           pip3 install -r requirements.txt
-          git clone https://github.com/unitaryfund/qrack.git; cd qrack; git checkout 154b8eb5366d00da454b943be14b834abc721ecd
-          mkdir -p build; cd build
-          cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm/bin/clang -DCMAKE_LINKER=/opt/homebrew/opt/llvm/bin/ld.lld -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=11 ..
-          make qrack_pinvoke
-          sudo make install
-          cd ../..
-          cd pennylane_qrack
-          cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm/bin/clang -DCMAKE_LINKER=/opt/homebrew/opt/llvm/bin/ld.lld ..
-          cmake --build . --target all
-          cd ..
           pip3 install .
           python setup.py bdist_wheel --plat-name=${{ matrix.platform }}
 
@@ -112,16 +208,6 @@ jobs:
           source venv/bin/activate
           pip3 install --upgrade wheel setuptools
           pip3 install -r requirements.txt
-          git clone https://github.com/unitaryfund/qrack.git; cd qrack; git checkout 154b8eb5366d00da454b943be14b834abc721ecd
-          mkdir -p build; cd build
-          cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm/bin/clang -DCMAKE_LINKER=/opt/homebrew/opt/llvm/bin/ld.lld -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=11 ..
-          make qrack_pinvoke
-          sudo make install
-          cd ../..
-          cd pennylane_qrack
-          cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm/bin/clang -DCMAKE_LINKER=/opt/homebrew/opt/llvm/bin/ld.lld ..
-          cmake --build . --target all
-          cd ..
           pip3 install .
           python setup.py bdist_wheel --plat-name=${{ matrix.platform }}
 
