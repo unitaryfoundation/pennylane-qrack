@@ -32,24 +32,15 @@ help:
 
 .PHONY: build-deps
 build-deps:
-ifneq ($(OS),Windows_NT)
+ifeq ($(UNAME_S),Linux)
 ifeq ($(QRACK_PRESENT),)
 	git clone https://github.com/unitaryfund/qrack.git; cd qrack; git checkout 50355ac5e38d49c187c3789f841ec6c0f88f74aa; cd ..
 endif
 	mkdir -p qrack/build
-ifeq ($(UNAME_S),Linux)
 ifeq ($(UNAME_P),x86_64)
 	cd qrack/build; $(CMAKE_L) -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_DEVRAND=ON -DQBCAPPOW=8 ..; make qrack; cd ../..
 else
 	cd qrack/build; $(CMAKE_L) -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_DEVRAND=ON -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=8 ..; make qrack; cd ../..11111
-endif
-endif
-ifeq ($(UNAME_S),Darwin)
-ifeq ($(UNAME_P),x86_64)
-	cd qrack/build; cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DENABLE_OPENCL=OFF -DQBCAPPOW=8 ..; make qrack; cd ../..
-else
-	cd qrack/build; cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=8 ..; make qrack; cd ../..
-endif
 endif
 	mkdir -p _qrack_include/qrack; cp -r qrack/include/* _qrack_include/qrack; cp -r qrack/build/include/* _qrack_include/qrack; mkdir _build; cd _build; cmake ..; make all; cd ..; cp _build/libqrack_device.so pennylane_qrack/
 endif
