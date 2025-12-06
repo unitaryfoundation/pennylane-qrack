@@ -29,14 +29,14 @@ endif
 	mkdir -p qrack/build
 ifeq ($(UNAME_S),Linux)
 ifeq ($(UNAME_P),x86_64)
-	cd qrack/build; cmake -DENABLE_RDRAND=OFF -DENABLE_DEVRAND=ON -DQBCAPPOW=7 ..; make qrack; cd ../..
+	cd qrack/build; cmake -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_DEVRAND=ON -DQBCAPPOW=7 ..; make qrack; cd ../..
 else
-	cd qrack/build; cmake -DENABLE_RDRAND=OFF -DENABLE_DEVRAND=ON -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=7 ..; make qrack; cd ../..
+	cd qrack/build; cmake -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_DEVRAND=ON -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=7 ..; make qrack; cd ../..
 endif
 endif
 ifeq ($(UNAME_S),Darwin)
 ifeq ($(UNAME_P),x86_64)
-	cd qrack/build; cmake -DQBCAPPOW=6 ..; make qrack; cd ../..
+	cd qrack/build; cmake -DENABLE_OPENCL=OFF -DQBCAPPOW=6 ..; make qrack; cd ../..
 else
 	cd qrack/build; cmake -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=6 ..; make qrack; cd ../..
 endif
