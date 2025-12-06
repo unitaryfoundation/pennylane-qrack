@@ -8,6 +8,16 @@ UNAME_S := $(shell uname -s)
 UNAME_P := $(shell uname -p)
 QRACK_PRESENT := $(wildcard qrack/.)
 
+ifeq ("$(wildcard /usr/local/bin/cmake)", "/usr/local/bin/cmake")
+CMAKE_L := /usr/local/bin/cmake
+else
+ifeq ("$(wildcard /usr/bin/cmake)", "/usr/bin/cmake")
+CMAKE_L := /usr/bin/cmake
+else
+CMAKE_L := cmake
+endif
+endif
+
 .PHONY: help
 help:
 	@echo "Please use \`make <target>' where <target> is one of"
@@ -29,9 +39,9 @@ endif
 	mkdir -p qrack/build
 ifeq ($(UNAME_S),Linux)
 ifeq ($(UNAME_P),x86_64)
-	cd qrack/build; /usr/bin/cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DENABLE_RDRAND=OFF -DENABLE_DEVRAND=ON -DQBCAPPOW=8 ..; make qrack; cd ../..
+	cd qrack/build; $(CMAKE_L) -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DENABLE_RDRAND=OFF -DENABLE_DEVRAND=ON -DQBCAPPOW=8 ..; make qrack; cd ../..
 else
-	cd qrack/build; /usr/bin/cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DENABLE_RDRAND=OFF -DENABLE_DEVRAND=ON -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=8 ..; make qrack; cd ../..
+	cd qrack/build; $(CMAKE_L) -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DENABLE_RDRAND=OFF -DENABLE_DEVRAND=ON -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=8 ..; make qrack; cd ../..
 endif
 endif
 ifeq ($(UNAME_S),Darwin)
