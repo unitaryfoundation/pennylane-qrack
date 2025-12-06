@@ -51,7 +51,7 @@ else
 	cd qrack/build; cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=8 ..; make qrack; cd ../..
 endif
 endif
-	mkdir -p _qrack_include/qrack; cp -r qrack/include/* _qrack_include/qrack; cp -r qrack/build/include/* _qrack_include/qrack; cp build/lib/pennylane_qrack/libqrack_device.so pennylane_qrack/
+	mkdir -p _qrack_include/qrack; cp -r qrack/include/* _qrack_include/qrack; cp -r qrack/build/include/* _qrack_include/qrack; mkdir _build; cd _build; cmake ..; make all; cd ..; cp _build/libqrack_device.so pennylane_qrack/
 endif
 
 .PHONY: install
