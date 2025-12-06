@@ -42,7 +42,7 @@ ifeq ($(UNAME_P),x86_64)
 else
 	cd qrack/build; $(CMAKE_L) -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_DEVRAND=ON -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=8 ..; make qrack; cd ../..11111
 endif
-	mkdir -p _qrack_include/qrack; cp -r qrack/include/* _qrack_include/qrack; cp -r qrack/build/include/* _qrack_include/qrack; mkdir _build; cd _build; cmake ..; make all; cd ..; cp _build/libqrack_device.so pennylane_qrack/
+	mkdir -p _qrack_include/qrack; cp -r qrack/include/* _qrack_include/qrack; cp -r qrack/build/include/* _qrack_include/qrack; mkdir -p _build; cd _build; cmake ..; make all; cd ..; cp _build/libqrack_device.so pennylane_qrack/
 endif
 
 .PHONY: install
