@@ -154,7 +154,7 @@ jobs:
         run: |
           pip install -r requirements.txt
           pip install .
-          python setup.py bdist_wheel --plat-name=${{ matrix.platform }}
+          sudo python setup.py bdist_wheel --plat-name=${{ matrix.platform }}
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
@@ -201,7 +201,7 @@ jobs:
         run: |
           pip install -r requirements.txt
           pip install .
-          python setup.py bdist_wheel --plat-name=${{ matrix.platform }}
+          sudo python setup.py bdist_wheel --plat-name=${{ matrix.platform }}
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
