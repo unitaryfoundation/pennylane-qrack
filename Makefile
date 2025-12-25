@@ -39,9 +39,9 @@ endif
 	mkdir -p qrack/build
 ifeq ($(UNAME_S),Linux)
 ifneq ($(filter $(UNAME_P),x86_64 i386),)
-	cd qrack/build; $(CMAKE_L) -DCPP_STD=20 -DENABLE_RDRAND=OFF -DENABLE_DEVRAND=ON -DQBCAPPOW=8 ..; make qrack; cd ../..
+	cd qrack/build; $(CMAKE_L) -DCPP_STD=20 -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_DEVRAND=ON -DQBCAPPOW=8 ..; make qrack; cd ../..
 else
-	cd qrack/build; $(CMAKE_L) -DCPP_STD=20 -DENABLE_RDRAND=OFF -DENABLE_DEVRAND=ON -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=8 ..; make qrack; cd ../..
+	cd qrack/build; $(CMAKE_L) -DCPP_STD=20 -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_DEVRAND=ON -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=8 ..; make qrack; cd ../..
 endif
 endif
 ifeq ($(UNAME_S),Darwin)
