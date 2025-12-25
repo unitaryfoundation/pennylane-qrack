@@ -43,15 +43,15 @@ ifneq ($(filter $(UNAME_P),x86_64 i386),)
 else
 	cd qrack/build; $(CMAKE_L) -DCPP_STD=20 -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_DEVRAND=ON -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=8 ..; make qrack; cd ../..
 endif
+	mkdir -p _qrack_include/qrack; cp -r qrack/include/* _qrack_include/qrack; cp -r qrack/build/include/* _qrack_include/qrack; mkdir -p _build; cd _build; $(CMAKE_L) ..; make all; cd ..; cp _build/libqrack_device.so pennylane_qrack/
 endif
 ifeq ($(UNAME_S),Darwin)
 ifneq ($(filter $(UNAME_P),x86_64 i386),)
-	cd qrack/build; $(CMAKE_L) -DCPP_STD=20 -DENABLE_OPENCL=OFF -DQBCAPPOW=8 -DBoost_INCLUDE_DIR=/opt/homebrew/include -DBoost_LIBRARY_DIRS=/opt/homebrew/lib ..; make qrack; cd ../..
+	cd qrack/build; $(CMAKE_L) -DCPP_STD=20 -DENABLE_OPENCL=OFF -DQBCAPPOW=8 -DBoost_INCLUDE_DIR=/opt/homebrew/include -DBoost_LIBRARY_DIRS=/opt/homebrew/lib ..; make install; cd ../..
 else
-	cd qrack/build; $(CMAKE_L) -DCPP_STD=20 -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=8 -DBoost_INCLUDE_DIR=/opt/homebrew/include -DBoost_LIBRARY_DIRS=/opt/homebrew/lib ..; make qrack; cd ../..
+	cd qrack/build; $(CMAKE_L) -DCPP_STD=20 -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=8 -DBoost_INCLUDE_DIR=/opt/homebrew/include -DBoost_LIBRARY_DIRS=/opt/homebrew/lib ..; make install; cd ../..
 endif
 endif
-	mkdir -p _qrack_include/qrack; cp -r qrack/include/* _qrack_include/qrack; cp -r qrack/build/include/* _qrack_include/qrack; mkdir -p _build; cd _build; $(CMAKE_L) ..; make all; cd ..; cp _build/libqrack_device.so pennylane_qrack/
 endif
 
 .PHONY: install
