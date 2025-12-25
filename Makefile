@@ -32,17 +32,25 @@ help:
 
 .PHONY: build-deps
 build-deps:
-ifeq ($(UNAME_S),Linux)
+ifneq ($(OS),Windows_NT)
 ifeq ($(QRACK_PRESENT),)
-	git clone https://github.com/unitaryfund/qrack.git; cd qrack; git checkout db595914b394e8ef2327df3a09c50dc8b264181e; cd ..
+	git clone https://github.com/unitaryfund/qrack.git; cd qrack; git checkout fba05b194862fbf7097b864327a7e04843dc0e8b; cd ..
 endif
 	mkdir -p qrack/build
-ifeq ($(UNAME_P),x86_64)
-	cd qrack/build; $(CMAKE_L) -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_DEVRAND=ON -DQBCAPPOW=8 ..; make qrack; cd ../..
+ifeq ($(UNAME_S),Linux)
+ifneq ($(filter $(UNAME_P),x86_64 i386),)
+	cd qrack/build; $(CMAKE_L) -DCPP_STD=20 -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_DEVRAND=ON -DQBCAPPOW=8 ..; make qrack; cd ../..
 else
-	cd qrack/build; $(CMAKE_L) -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_DEVRAND=ON -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=8 ..; make qrack; cd ../..11111
+	cd qrack/build; $(CMAKE_L) -DCPP_STD=20 -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_DEVRAND=ON -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=8 ..; make qrack; cd ../..
 endif
-	mkdir -p _qrack_include/qrack; cp -r qrack/include/* _qrack_include/qrack; cp -r qrack/build/include/* _qrack_include/qrack; mkdir -p _build; cd _build; cmake ..; make all; cd ..; cp _build/libqrack_device.so pennylane_qrack/
+endif
+ifeq ($(UNAME_S),Darwin)
+ifneq ($(filter $(UNAME_P),x86_64 i386),)
+	cd qrack/build; cmake -DCPP_STD=20 -DENABLE_OPENCL=OFF -DQBCAPPOW=8 ..; make qrack; cd ../..
+else
+	cd qrack/build; cmake -DCPP_STD=20 -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=8 ..; make qrack; cd ../..
+endif
+endif
 endif
 
 .PHONY: install
