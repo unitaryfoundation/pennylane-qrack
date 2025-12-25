@@ -148,27 +148,14 @@ jobs:
       - name: Prepare Build Environment (MacOS)
         run: |
           brew upgrade
-          brew install cmake ninja libomp numpy virtualenv llvm lld
+          brew install cmake ninja libomp numpy virtualenv llvm lld boost
 
       - name: Build Wheel
         run: |
-          mkdir venv
-          python -m venv venv
           source venv/bin/activate
-          pip3 install --upgrade wheel setuptools
-          pip3 install -r requirements.txt
-          git clone https://github.com/unitaryfund/qrack.git; cd qrack; git checkout 154b8eb5366d00da454b943be14b834abc721ecd
-          mkdir -p build; cd build
-          cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm/bin/clang -DCMAKE_LINKER=/opt/homebrew/opt/llvm/bin/ld.lld -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=11 ..
-          make qrack_pinvoke
-          sudo make install
-          cd ../..
-          cd pennylane_qrack
-          cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm/bin/clang -DCMAKE_LINKER=/opt/homebrew/opt/llvm/bin/ld.lld ..
-          cmake --build . --target all
-          cd ..
-          pip3 install .
-          python setup.py bdist_wheel --plat-name=${{ matrix.platform }}
+          pip install -r requirements.txt
+          pip install .
+          python setup.py bdist_wheel --plat-name=${{ steps.abi.outputs.platform }}
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
@@ -209,27 +196,14 @@ jobs:
       - name: Prepare Build Environment (MacOS)
         run: |
           brew upgrade
-          brew install cmake ninja libomp numpy virtualenv llvm lld
+          brew install cmake ninja libomp numpy virtualenv llvm lld boost
 
       - name: Build Wheel
         run: |
-          mkdir venv
-          python -m venv venv
           source venv/bin/activate
-          pip3 install --upgrade wheel setuptools
-          pip3 install -r requirements.txt
-          git clone https://github.com/unitaryfund/qrack.git; cd qrack; git checkout 154b8eb5366d00da454b943be14b834abc721ecd
-          mkdir -p build; cd build
-          cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm/bin/clang -DCMAKE_LINKER=/opt/homebrew/opt/llvm/bin/ld.lld -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=11 ..
-          make qrack_pinvoke
-          sudo make install
-          cd ../..
-          cd pennylane_qrack
-          cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm/bin/clang -DCMAKE_LINKER=/opt/homebrew/opt/llvm/bin/ld.lld ..
-          cmake --build . --target all
-          cd ..
-          pip3 install .
-          python setup.py bdist_wheel --plat-name=${{ matrix.platform }}
+          pip install -r requirements.txt
+          pip install .
+          python setup.py bdist_wheel --plat-name=${{ steps.abi.outputs.platform }}
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
