@@ -51,6 +51,7 @@ else
 	cd qrack/build; cmake -DCPP_STD=20 -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=8 -DBoost_INCLUDE_DIR=/opt/homebrew/include -DBoost_LIBRARY_DIRS=/opt/homebrew/lib ..; make qrack; cd ../..
 endif
 endif
+	mkdir -p _qrack_include/qrack; cp -r qrack/include/* _qrack_include/qrack; cp -r qrack/build/include/* _qrack_include/qrack; mkdir -p _build; cd _build; cmake ..; make all; cd ..; cp _build/libqrack_device.so pennylane_qrack/
 endif
 
 .PHONY: install
