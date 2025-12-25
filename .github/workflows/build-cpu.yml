@@ -152,7 +152,6 @@ jobs:
 
       - name: Build Wheel
         run: |
-          source venv/bin/activate
           pip install -r requirements.txt
           pip install .
           python setup.py bdist_wheel --plat-name=${{ steps.abi.outputs.platform }}
@@ -200,7 +199,6 @@ jobs:
 
       - name: Build Wheel
         run: |
-          source venv/bin/activate
           pip install -r requirements.txt
           pip install .
           python setup.py bdist_wheel --plat-name=${{ steps.abi.outputs.platform }}
