@@ -53,22 +53,28 @@ This is a complete list of boolean options and their meanings:
     +---------------------------+-------------+-------------------------------------------------------------------------------------+
     | **Parameter**             | **Default** | **Description**                                                                     |
     +===========================+=============+=====================================================================================+
-    | `isStabilizerHybrid`      | False       | Use "hybrid" stabilizer optimization?                                               |
+    | `isStabilizerHybrid`      | True        | Use "hybrid" stabilizer optimization?                                               |
     |                           |             | (Non-Clifford circuits will fall back to near-Clifford or universal simulation.)    |
     +---------------------------+-------------+-------------------------------------------------------------------------------------+
-    | `isTensorNetwork`         | False       | Use "tensor network" optimization?                                                  |
+    | `isTensorNetwork`         | True        | Use "tensor network" optimization?                                                  |
     |                           |             | (This option locally simplifies circuits, just-in-time, before running them.)       |
     +---------------------------+-------------+-------------------------------------------------------------------------------------+
     | `isSchmidtDecompose`      | True        | Use Schmidt decomposition optimizations?                                            |
     |                           |             |                                                                                     |
     +---------------------------+-------------+-------------------------------------------------------------------------------------+
-    | `isSchmidtDecomposeMulti` | True        | Distribute Schmidt-decomposed qubit subsystems to multiple GPUs or accelerators?    |
+    | `isSchmidtDecomposeMulti` | False       | Distribute Schmidt-decomposed qubit subsystems to multiple GPUs or accelerators?    |
     |                           |             | (Mismatched device capacities might hurt overall performance.)                      |
     +---------------------------+-------------+-------------------------------------------------------------------------------------+
     | `isBinaryDecisionTree`    | False       | Use "quantum binary decision diagram" ("QBDD") methods?                             |
     |                           |             | (Note that QBDD is CPU-only.)                                                       |
     +---------------------------+-------------+-------------------------------------------------------------------------------------+
     | `isOpenCL`                | True        | Use GPU acceleration?                                                               |
+    |                           |             |                                                                                     |
+    +---------------------------+-------------+-------------------------------------------------------------------------------------+
+    | `isPaged`                 | True        | Use multi-GPU (or multi-memory-segment) acceleration?                               |
+    |                           |             |                                                                                     |
+    +---------------------------+-------------+-------------------------------------------------------------------------------------+
+    | `isCpuGpuHybrid`          | True        | Use CPU/GPU method hybridization?                                                   |
     |                           |             |                                                                                     |
     +---------------------------+-------------+-------------------------------------------------------------------------------------+
     | `isHostPointer`           | False       | Allocate GPU buffer from general host heap?                                         |

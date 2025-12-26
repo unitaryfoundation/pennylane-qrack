@@ -151,20 +151,20 @@ class QrackDevice(QubitDevice):
     )
 
     # Use "hybrid" stabilizer optimization? (Default is "true"; non-Clifford circuits will fall back to near-Clifford or universal simulation)
-    isStabilizerHybrid = False
+    isStabilizerHybrid = True
     # Use "tensor network" optimization? (Default is "true"; prevents dynamic qubit de-allocation; might function sub-optimally with "hybrid" stabilizer enabled)
     isTensorNetwork = True
     # Use Schmidt decomposition optimizations? (Default is "true")
     isSchmidtDecompose = True
-    # Distribute Schmidt-decomposed qubit subsystems to multiple GPUs or accelerators, if available? (Default is "true"; mismatched device capacities might hurt overall performance)
-    isSchmidtDecomposeMulti = True
+    # Distribute Schmidt-decomposed qubit subsystems to multiple GPUs or accelerators, if available? (Default is "False"; mismatched device capacities might hurt overall performance)
+    isSchmidtDecomposeMulti = False
     # Use "quantum binary decision diagram" ("QBDD") methods? (Default is "false"; note that QBDD is CPU-only)
     isBinaryDecisionTree = False
     # Use GPU acceleration? (Default is "true")
     isOpenCL = True
-    # Use multi-GPU (or "multi-page") acceleration? (Default is "false")
+    # Use multi-GPU (or "multi-page") acceleration? (Default is "true")
     isPaged = True
-    # Use CPU/GPU method hybridization? (Default is "false")
+    # Use CPU/GPU method hybridization? (Default is "True")
     isCpuGpuHybrid = True
     # Allocate GPU buffer from general host heap? (Default is "false"; "true" might improve performance or reliability in certain cases, like if using an Intel HD as accelerator)
     isHostPointer = True if os.environ.get("PYQRACK_HOST_POINTER_DEFAULT_ON") else False
