@@ -152,9 +152,23 @@ jobs:
 
       - name: Build Wheel
         run: |
-          pip install -r requirements.txt
-          pip install .
-          sudo python setup.py bdist_wheel --plat-name=${{ matrix.platform }}
+          mkdir venv
+          python -m venv venv
+          source venv/bin/activate
+          pip3 install --upgrade wheel setuptools
+          pip3 install -r requirements.txt
+          git clone https://github.com/unitaryfund/qrack.git; cd qrack; git checkout 89cce97f62a8d031479e8d0f71086bb0289e99ed
+          mkdir -p build; cd build
+          cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm/bin/clang -DCMAKE_LINKER=/opt/homebrew/opt/llvm/bin/ld.lld -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=11 ..
+          make qrack_pinvoke
+          sudo make install
+          cd ../..
+          cd pennylane_qrack
+          cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm/bin/clang -DCMAKE_LINKER=/opt/homebrew/opt/llvm/bin/ld.lld ..
+          cmake --build . --target all
+          cd ..
+          pip3 install .
+          python setup.py bdist_wheel --plat-name=${{ matrix.platform }}
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
@@ -199,9 +213,23 @@ jobs:
 
       - name: Build Wheel
         run: |
-          pip install -r requirements.txt
-          pip install .
-          sudo python setup.py bdist_wheel --plat-name=${{ matrix.platform }}
+          mkdir venv
+          python -m venv venv
+          source venv/bin/activate
+          pip3 install --upgrade wheel setuptools
+          pip3 install -r requirements.txt
+          git clone https://github.com/unitaryfund/qrack.git; cd qrack; git checkout 89cce97f62a8d031479e8d0f71086bb0289e99ed
+          mkdir -p build; cd build
+          cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm/bin/clang -DCMAKE_LINKER=/opt/homebrew/opt/llvm/bin/ld.lld -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=11 ..
+          make qrack_pinvoke
+          sudo make install
+          cd ../..
+          cd pennylane_qrack
+          cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm/bin/clang -DCMAKE_LINKER=/opt/homebrew/opt/llvm/bin/ld.lld ..
+          cmake --build . --target all
+          cd ..
+          pip3 install .
+          python setup.py bdist_wheel --plat-name=${{ matrix.platform }}
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
