@@ -271,7 +271,6 @@ jobs:
 
       - name: Prepare Build Environment (MacOS)
         run: |
-          brew upgrade
           brew install cmake virtualenv
 
       - name: Build Wheel
