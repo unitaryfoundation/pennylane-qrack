@@ -112,6 +112,8 @@ class QrackStabilizerDevice(QubitDevice):
         self.shots = shots
         self._state = QrackStabilizer(self.num_wires)
         self.device_kwargs = {}
+        self._circuit = []
+        self._is_nc = False
 
     def _reverse_state(self):
         end = self.num_wires - 1
@@ -120,7 +122,17 @@ class QrackStabilizerDevice(QubitDevice):
             self._state.swap(i, end - i)
 
     def apply(self, operations, **kwargs):
+        self._circuit = self._circuit + operations
         for op in operations:
+            opname = op.name
+            if isinstance(op, Adjoint):
+                op = op.base
+                opname = op.name + ".inv"
+            if opname in ["T", "T.inv", "RZ", "RZ.inv"]:
+                self._is_nc = True
+
+    def _apply(self, operations, **kwargs):
+        for op in self._circuit:
             if isinstance(op, BasisState):
                 self._apply_basis_state(op)
             else:
@@ -305,6 +317,20 @@ class QrackStabilizerDevice(QubitDevice):
             )
 
             return self._samples
+
+        if self._is_nc:
+            samples = []
+            for _ in range(self.shots):
+                self._state.reset_all()
+                self._apply()
+                samples.append(self._generate_sample())
+            self._samples = QubitDevice.states_to_binary(np.array(samples), self.num_wires)
+            self._circuit = []
+
+            return self._samples
+
+        self._state.reset_all()
+        self._apply()
 
         if self.shots == 1:
             self._samples = QubitDevice.states_to_binary(
