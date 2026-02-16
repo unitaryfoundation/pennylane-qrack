@@ -99,6 +99,8 @@ class QrackStabilizerDevice(QubitDevice):
         "C(PauliZ)",
         "Hadamard",
         "SX",
+        "T",
+        "RZ",
     }
 
     config_filepath = pathlib.Path(
@@ -207,6 +209,18 @@ class QrackStabilizerDevice(QubitDevice):
             half_pi = math.pi / 2
             for label in device_wires.labels:
                 self._state.u(label, -half_pi, -half.pi, half_pi)
+        elif opname == "T":
+            for label in device_wires.labels:
+                self._state.t(label)
+        elif opname == "T.inv":
+            for label in device_wires.labels:
+                self._state.adjt(label)
+        elif opname == "RZ":
+            for label in device_wires.labels:
+                self._state.r(Pauli.PauliZ, par[0], label)
+        elif opname == "RZ.inv":
+            for label in device_wires.labels:
+                self._state.r(Pauli.PauliZ, -par[0], label)
         elif opname not in [
             "Identity",
             "Identity.inv",

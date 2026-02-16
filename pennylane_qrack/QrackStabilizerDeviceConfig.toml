@@ -23,6 +23,8 @@ PauliY                  = { properties = [ "controllable", "invertible" ] }
 PauliZ                  = { properties = [ "controllable", "invertible" ] }
 Hadamard                = { properties = [ "invertible" ] }
 S                       = { properties = [ "invertible" ] }
+T                       = { properties = [ "invertible" ] }
+RZ                      = { properties = [ "invertible" ] }
 CNOT                    = { properties = [ "invertible" ] }
 SWAP                    = { properties = [ "invertible" ] }
 ISWAP                   = { properties = [ "invertible" ] }
