@@ -131,7 +131,7 @@ class QrackStabilizerDevice(QubitDevice):
             if opname in ["T", "T.inv", "RZ", "RZ.inv"]:
                 self._is_nc = True
 
-    def _apply(self, operations, **kwargs):
+    def _apply(self):
         for op in self._circuit:
             if isinstance(op, BasisState):
                 self._apply_basis_state(op)
