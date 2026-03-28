@@ -147,7 +147,6 @@ jobs:
 
       - name: Prepare Build Environment (MacOS)
         run: |
-          brew upgrade
           brew install cmake virtualenv
 
       - name: Build Wheel
@@ -157,7 +156,7 @@ jobs:
           source venv/bin/activate
           pip3 install --upgrade wheel setuptools
           pip3 install -r requirements.txt
-          git clone https://github.com/unitaryfund/qrack.git; cd qrack; git checkout f11a8c6a402b6e230328a5934d07b71d8429a423
+          git clone https://github.com/unitaryfund/qrack.git; cd qrack; git checkout c11f4797d3d1606bb3cacc6613c13bbd3d110afc
           mkdir -p build; cd build
           cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCPP_STD=20 -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=8 ..
           make qrack_pinvoke
@@ -208,7 +207,6 @@ jobs:
 
       - name: Prepare Build Environment (MacOS)
         run: |
-          brew upgrade
           brew install cmake virtualenv
 
       - name: Build Wheel
@@ -218,7 +216,7 @@ jobs:
           source venv/bin/activate
           pip3 install --upgrade wheel setuptools
           pip3 install -r requirements.txt
-          git clone https://github.com/unitaryfund/qrack.git; cd qrack; git checkout f11a8c6a402b6e230328a5934d07b71d8429a423
+          git clone https://github.com/unitaryfund/qrack.git; cd qrack; git checkout c11f4797d3d1606bb3cacc6613c13bbd3d110afc
           mkdir -p build; cd build
           cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCPP_STD=20 -DENABLE_OPENCL=OFF -DENABLE_RDRAND=OFF -DENABLE_COMPLEX_X2=OFF -DENABLE_SSE3=OFF -DQBCAPPOW=8 ..
           make qrack_pinvoke
@@ -278,7 +276,7 @@ jobs:
           source venv/bin/activate
           pip3 install --upgrade wheel setuptools
           pip3 install -r requirements.txt
-          git clone https://github.com/unitaryfund/qrack.git; cd qrack; git checkout f11a8c6a402b6e230328a5934d07b71d8429a423
+          git clone https://github.com/unitaryfund/qrack.git; cd qrack; git checkout c11f4797d3d1606bb3cacc6613c13bbd3d110afc
           mkdir -p build; cd build
           cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DENABLE_OPENCL=OFF -DCPP_STD=20 -DQBCAPPOW=8 ..
           make qrack_pinvoke
