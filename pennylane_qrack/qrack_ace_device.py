@@ -150,8 +150,8 @@ class QrackAceDevice(QubitDevice):
             self.is_schmidt_decompose_multi = options["is_schmidt_decompose_multi"]
         if "is_binary_decision_tree" in options:
             self.is_binary_decision_tree = options["is_binary_decision_tree"]
-        if "is_opencl" in options:
-            self.is_opencl = options["is_opencl"]
+        if "is_gpu" in options:
+            self.is_gpu = options["is_gpu"]
         if "is_host_pointer" in options:
             self.is_host_pointer = options["is_host_pointer"]
         if "is_sparse" in options:
@@ -178,7 +178,7 @@ class QrackAceDevice(QubitDevice):
             is_stabilizer_hybrid=self.is_stabilizer_hybrid,
             is_schmidt_decompose=self.is_schmidt_decompose,
             is_binary_decision_tree=self.is_binary_decision_tree,
-            is_opencl=self.is_opencl,
+            is_gpu=self.is_gpu,
             is_host_pointer=self.is_host_pointer,
             noise=self.noise,
         )
@@ -190,7 +190,7 @@ class QrackAceDevice(QubitDevice):
             "is_schmidt_decompose": self.is_schmidt_decompose,
             "is_schmidt_decompose_parallel": self.is_schmidt_decompose_multi,
             "is_qpdd": self.is_binary_decision_tree,
-            "is_gpu": self.is_opencl,
+            "is_gpu": self.is_gpu,
             "is_host_pointer": self.is_host_pointer,
             "noise": self.noise,
         }

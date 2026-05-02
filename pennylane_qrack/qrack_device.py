@@ -159,7 +159,7 @@ class QrackDevice(QubitDevice):
     # Use "quantum binary decision diagram" ("QBDD") methods? (Default is "false"; note that QBDD is CPU-only)
     is_binary_decision_tree = False
     # Use GPU acceleration? (Default is "true")
-    is_opencl = True
+    is_gpu = True
     # Allocate GPU buffer from general host heap? (Default is "false"; "true" might improve performance or reliability in certain cases, like if using an Intel HD as accelerator)
     is_host_pointer = True if os.environ.get("PYQRACK_HOST_POINTER_DEFAULT_ON") else False
     # For CPU-based simulation, use sparse state vectors (Default is "false")
@@ -189,8 +189,8 @@ class QrackDevice(QubitDevice):
             self.is_schmidt_decompose_multi = options["is_schmidt_decompose_multi"]
         if "is_binary_decision_tree" in options:
             self.is_binary_decision_tree = options["is_binary_decision_tree"]
-        if "is_opencl" in options:
-            self.is_opencl = options["is_opencl"]
+        if "is_gpu" in options:
+            self.is_gpu = options["is_gpu"]
         if "is_host_pointer" in options:
             self.is_host_pointer = options["is_host_pointer"]
         if "is_sparse" in options:
@@ -207,7 +207,7 @@ class QrackDevice(QubitDevice):
             is_schmidt_decompose_multi=self.is_schmidt_decompose_multi,
             is_schmidt_decompose=self.is_schmidt_decompose,
             is_binary_decision_tree=self.is_binary_decision_tree,
-            is_opencl=self.is_opencl,
+            is_gpu=self.is_gpu,
             is_host_pointer=self.is_host_pointer,
             is_sparse=self.is_sparse,
             noise=self.noise,
@@ -217,7 +217,7 @@ class QrackDevice(QubitDevice):
             "is_schmidt_decompose": self.is_schmidt_decompose,
             "is_schmidt_decompose_parallel": self.is_schmidt_decompose_multi,
             "is_qpdd": self.is_binary_decision_tree,
-            "is_gpu": self.is_opencl,
+            "is_gpu": self.is_gpu,
             "is_paged": True,
             "is_host_pointer": self.is_host_pointer,
             "is_sparse": self.is_sparse,
