@@ -142,22 +142,20 @@ class QrackAceDevice(QubitDevice):
 
     def __init__(self, wires=0, shots=None, **kwargs):
         options = dict(kwargs)
-        if "isStabilizerHybrid" in options:
-            self.isStabilizerHybrid = options["isStabilizerHybrid"]
-        if "isTensorNetwork" in options:
-            self.isTensorNetwork = options["isTensorNetwork"]
-        if "isSchmidtDecompose" in options:
-            self.isSchmidtDecompose = options["isSchmidtDecompose"]
-        if "isBinaryDecisionTree" in options:
-            self.isBinaryDecisionTree = options["isBinaryDecisionTree"]
-        if "isOpenCL" in options:
-            self.isOpenCL = options["isOpenCL"]
-        if "isPaged" in options:
-            self.isPaged = options["isPaged"]
-        if "isCpuGpuHybrid" in options:
-            self.isCpuGpuHybrid = options["isCpuGpuHybrid"]
-        if "isHostPointer" in options:
-            self.isHostPointer = options["isHostPointer"]
+        if "is_stabilizer_hybrid" in options:
+            self.is_stabilizer_hybrid = options["is_stabilizer_hybrid"]
+        if "is_schmidt_decompose" in options:
+            self.is_schmidt_decompose = options["is_schmidt_decompose"]
+        if "is_schmidt_decompose_multi" in options:
+            self.is_schmidt_decompose_multi = options["is_schmidt_decompose_multi"]
+        if "is_binary_decision_tree" in options:
+            self.is_binary_decision_tree = options["is_binary_decision_tree"]
+        if "is_opencl" in options:
+            self.is_opencl = options["is_opencl"]
+        if "is_host_pointer" in options:
+            self.is_host_pointer = options["is_host_pointer"]
+        if "is_sparse" in options:
+            self.is_sparse = options["is_sparse"]
         if "noise" in options:
             self.noise = options["noise"]
             if (self.noise != 0) and (shots is None):
@@ -176,28 +174,24 @@ class QrackAceDevice(QubitDevice):
             long_range_columns=self.long_range_columns,
             long_range_rows=self.long_range_rows,
             is_transpose=self.is_transpose,
-            isStabilizerHybrid=self.isStabilizerHybrid,
-            isTensorNetwork=self.isTensorNetwork,
-            isSchmidtDecompose=self.isSchmidtDecompose,
-            isBinaryDecisionTree=self.isBinaryDecisionTree,
-            isOpenCL=self.isOpenCL,
-            isCpuGpuHybrid=self.isCpuGpuHybrid,
-            isHostPointer=self.isHostPointer,
+            is_schmidt_decompose_multi=self.is_schmidt_decompose_multi,
+            is_stabilizer_hybrid=self.is_stabilizer_hybrid,
+            is_schmidt_decompose=self.is_schmidt_decompose,
+            is_binary_decision_tree=self.is_binary_decision_tree,
+            is_opencl=self.is_opencl,
+            is_host_pointer=self.is_host_pointer,
             noise=self.noise,
         )
         self.device_kwargs = {
             "long_range_columns": self.long_range_columns,
             "long_range_rows": self.long_range_rows,
             "is_transpose": self.is_transpose,
-            "is_hybrid_stabilizer": self.isStabilizerHybrid,
-            "is_tensor_network": self.isTensorNetwork,
-            "is_schmidt_decompose": self.isSchmidtDecompose,
-            "is_schmidt_decompose_parallel": self.isSchmidtDecomposeMulti,
-            "is_qpdd": self.isBinaryDecisionTree,
-            "is_gpu": self.isOpenCL,
-            "is_paged": self.isPaged,
-            "is_hybrid_cpu_gpu": self.isCpuGpuHybrid,
-            "is_host_pointer": self.isHostPointer,
+            "is_hybrid_stabilizer": self.is_stabilizer_hybrid,
+            "is_schmidt_decompose": self.is_schmidt_decompose,
+            "is_schmidt_decompose_parallel": self.is_schmidt_decompose_multi,
+            "is_qpdd": self.is_binary_decision_tree,
+            "is_gpu": self.is_opencl,
+            "is_host_pointer": self.is_host_pointer,
             "noise": self.noise,
         }
         self._circuit = []
