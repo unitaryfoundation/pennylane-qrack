@@ -151,25 +151,19 @@ class QrackDevice(QubitDevice):
     )
 
     # Use "hybrid" stabilizer optimization? (Default is "true"; non-Clifford circuits will fall back to near-Clifford or universal simulation)
-    isStabilizerHybrid = True
-    # Use "tensor network" optimization? (Default is "true"; prevents dynamic qubit de-allocation; might function sub-optimally with "hybrid" stabilizer enabled)
-    isTensorNetwork = True
+    is_stabilizer_hybrid = True
     # Use Schmidt decomposition optimizations? (Default is "true")
-    isSchmidtDecompose = True
+    is_schmidt_decompose = True
     # Distribute Schmidt-decomposed qubit subsystems to multiple GPUs or accelerators, if available? (Default is "False"; mismatched device capacities might hurt overall performance)
-    isSchmidtDecomposeMulti = False
+    is_schmidt_decompose_multi = False
     # Use "quantum binary decision diagram" ("QBDD") methods? (Default is "false"; note that QBDD is CPU-only)
-    isBinaryDecisionTree = False
+    is_binary_decision_tree = False
     # Use GPU acceleration? (Default is "true")
-    isOpenCL = True
-    # Use multi-GPU (or "multi-page") acceleration? (Default is "true")
-    isPaged = True
-    # Use CPU/GPU method hybridization? (Default is "True")
-    isCpuGpuHybrid = True
+    is_opencl = True
     # Allocate GPU buffer from general host heap? (Default is "false"; "true" might improve performance or reliability in certain cases, like if using an Intel HD as accelerator)
-    isHostPointer = True if os.environ.get("PYQRACK_HOST_POINTER_DEFAULT_ON") else False
+    is_host_pointer = True if os.environ.get("PYQRACK_HOST_POINTER_DEFAULT_ON") else False
     # For CPU-based simulation, use sparse state vectors (Default is "false")
-    isSparse = False
+    is_sparse = False
     # Noise parameter. (Default is "0"; depolarizing noise intensity can also be controlled by "QRACK_GATE_DEPOLARIZATION" environment variable)
     noise = 0
 
@@ -187,24 +181,20 @@ class QrackDevice(QubitDevice):
 
     def __init__(self, wires=0, shots=None, **kwargs):
         options = dict(kwargs)
-        if "isStabilizerHybrid" in options:
-            self.isStabilizerHybrid = options["isStabilizerHybrid"]
-        if "isTensorNetwork" in options:
-            self.isTensorNetwork = options["isTensorNetwork"]
-        if "isSchmidtDecompose" in options:
-            self.isSchmidtDecompose = options["isSchmidtDecompose"]
-        if "isBinaryDecisionTree" in options:
-            self.isBinaryDecisionTree = options["isBinaryDecisionTree"]
-        if "isOpenCL" in options:
-            self.isOpenCL = options["isOpenCL"]
-        if "isPaged" in options:
-            self.isPaged = options["isPaged"]
-        if "isCpuGpuHybrid" in options:
-            self.isCpuGpuHybrid = options["isCpuGpuHybrid"]
-        if "isHostPointer" in options:
-            self.isHostPointer = options["isHostPointer"]
-        if "isSparse" in options:
-            self.isSparse = options["isSparse"]
+        if "is_stabilizer_hybrid" in options:
+            self.is_stabilizer_hybrid = options["is_stabilizer_hybrid"]
+        if "is_schmidt_decompose" in options:
+            self.is_schmidt_decompose = options["is_schmidt_decompose"]
+        if "is_schmidt_decompose_multi" in options:
+            self.is_schmidt_decompose_multi = options["is_schmidt_decompose_multi"]
+        if "is_binary_decision_tree" in options:
+            self.is_binary_decision_tree = options["is_binary_decision_tree"]
+        if "is_opencl" in options:
+            self.is_opencl = options["is_opencl"]
+        if "is_host_pointer" in options:
+            self.is_host_pointer = options["is_host_pointer"]
+        if "is_sparse" in options:
+            self.is_sparse = options["is_sparse"]
         if "noise" in options:
             self.noise = options["noise"]
             if (self.noise != 0) and (shots is None):
@@ -213,27 +203,24 @@ class QrackDevice(QubitDevice):
         self.shots = shots
         self._state = QrackSimulator(
             self.num_wires,
-            isStabilizerHybrid=self.isStabilizerHybrid,
-            isTensorNetwork=self.isTensorNetwork,
-            isSchmidtDecompose=self.isSchmidtDecompose,
-            isBinaryDecisionTree=self.isBinaryDecisionTree,
-            isOpenCL=self.isOpenCL,
-            isCpuGpuHybrid=self.isCpuGpuHybrid,
-            isHostPointer=self.isHostPointer,
-            isSparse=self.isSparse,
+            is_stabilizer_hybrid=self.is_stabilizer_hybrid,
+            is_schmidt_decompose_multi=self.is_schmidt_decompose_multi,
+            is_schmidt_decompose=self.is_schmidt_decompose,
+            is_binary_decision_tree=self.is_binary_decision_tree,
+            is_opencl=self.is_opencl,
+            is_host_pointer=self.is_host_pointer,
+            is_sparse=self.is_sparse,
             noise=self.noise,
         )
         self.device_kwargs = {
-            "is_hybrid_stabilizer": self.isStabilizerHybrid,
-            "is_tensor_network": self.isTensorNetwork,
-            "is_schmidt_decompose": self.isSchmidtDecompose,
-            "is_schmidt_decompose_parallel": self.isSchmidtDecomposeMulti,
-            "is_qpdd": self.isBinaryDecisionTree,
-            "is_gpu": self.isOpenCL,
-            "is_paged": self.isPaged,
-            "is_hybrid_cpu_gpu": self.isCpuGpuHybrid,
-            "is_host_pointer": self.isHostPointer,
-            "is_sparse": self.isSparse,
+            "is_hybrid_stabilizer": self.is_stabilizer_hybrid,
+            "is_schmidt_decompose": self.is_schmidt_decompose,
+            "is_schmidt_decompose_parallel": self.is_schmidt_decompose_multi,
+            "is_qpdd": self.is_binary_decision_tree,
+            "is_gpu": self.is_opencl,
+            "is_paged": True,
+            "is_host_pointer": self.is_host_pointer,
+            "is_sparse": self.is_sparse,
             "noise": self.noise,
         }
         self._circuit = []
