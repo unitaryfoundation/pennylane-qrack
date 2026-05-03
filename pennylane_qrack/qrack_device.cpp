@@ -405,7 +405,7 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
         kwargs = trim(kwargs);
 
         std::map<std::string, int> keyMap;
-        keyMap["'is_stabilizer_hybrid'"] = 1;
+        keyMap["'is_hybrid_stabilizer'"] = 1;
         keyMap["'is_tensor_network'"] = 2;
         keyMap["'is_schmidt_decomposed'"] = 3;
         keyMap["'is_schmidt_decomposition_parallel'"] = 4;
