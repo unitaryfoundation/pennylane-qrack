@@ -203,22 +203,23 @@ class QrackDevice(QubitDevice):
         self.shots = shots
         self._state = QrackSimulator(
             self.num_wires,
-            is_stabilizer_hybrid=self.is_stabilizer_hybrid,
-            is_schmidt_decompose_multi=self.is_schmidt_decompose_multi,
-            is_near_clifford_tableau_writer=self.is_near_clifford_tableau_writer,
-            is_binary_decision_tree=self.is_binary_decision_tree,
-            is_gpu=self.is_gpu,
-            is_host_pointer=self.is_host_pointer,
-            is_sparse=self.is_sparse,
-            noise=self.noise,
+            is_stabilizer_hybrid = self.is_stabilizer_hybrid or self.is_near_clifford_tableau_writer,
+            is_schmidt_decompose_multi = self.is_schmidt_decompose_multi,
+            is_near_clifford_tableau_writer = self.is_near_clifford_tableau_writer,
+            is_binary_decision_tree = self.is_binary_decision_tree,
+            is_gpu = self.is_gpu,
+            is_host_pointer = self.is_host_pointer,
+            is_sparse = self.is_sparse,
+            noise = self.noise,
         )
         self.device_kwargs = {
-            "is_hybrid_stabilizer": self.is_stabilizer_hybrid or self.is_near_clifford_tableau_writer,
-            "is_schmidt_decompose": not self.is_near_clifford_tableau_writer,
+            "is_stabilizer_hybrid": self.is_stabilizer_hybrid or self.is_near_clifford_tableau_writer,
             "is_schmidt_decompose_multi": self.is_schmidt_decompose_multi,
+            "is_schmidt_decompose": not self.is_near_clifford_tableau_writer,
             "is_qpdd": self.is_binary_decision_tree,
             "is_gpu": self.is_gpu and not self.is_near_clifford_tableau_writer,
             "is_host_pointer": self.is_host_pointer,
+            "is_sparse": self.is_sparse,
             "noise": self.noise,
         }
         self._circuit = []
