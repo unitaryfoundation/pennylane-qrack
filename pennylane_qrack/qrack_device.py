@@ -153,7 +153,7 @@ class QrackDevice(QubitDevice):
     # Use "hybrid" stabilizer optimization? (Default is "true"; non-Clifford circuits will fall back to near-Clifford or universal simulation)
     is_stabilizer_hybrid = True
     # Use CPU-based near-Clifford method
-    is_near_clifford_tableau_writer = True
+    is_near_clifford_tableau_writer = False
     # Distribute Schmidt-decomposed qubit subsystems to multiple GPUs or accelerators, if available? (Default is "False"; mismatched device capacities might hurt overall performance)
     is_schmidt_decompose_multi = False
     # Use "quantum binary decision diagram" ("QBDD") methods? (Default is "false"; note that QBDD is CPU-only)
