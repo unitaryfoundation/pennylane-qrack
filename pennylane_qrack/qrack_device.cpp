@@ -405,17 +405,14 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
         kwargs = trim(kwargs);
 
         std::map<std::string, int> keyMap;
-        keyMap["'is_hybrid_stabilizer'"] = 1;
-        keyMap["'is_tensor_network'"] = 2;
-        keyMap["'is_schmidt_decompose'"] = 3;
-        keyMap["'is_schmidt_decompose_multi'"] = 4;
-        keyMap["'is_qbdd'"] = 5;
-        keyMap["'is_gpu'"] = 6;
-        keyMap["'is_paged'"] = 7;
-        keyMap["'is_hybrid_cpu_gpu'"] = 8;
-        keyMap["'is_host_pointer'"] =9;
-        keyMap["'is_sparse'"] =10;
-        keyMap["'noise'"] = 11;
+        keyMap["'is_stabilizer_hybrid'"] = 1;
+        keyMap["'is_schmidt_decompose'"] = 2;
+        keyMap["'is_schmidt_decompose_multi'"] = 3;
+        keyMap["'is_qpdd'"] = 4;
+        keyMap["'is_gpu'"] = 5;
+        keyMap["'is_host_pointer'"] = 6;
+        keyMap["'is_sparse'"] = 7;
+        keyMap["'noise'"] = 8;
 
         size_t pos;
         while ((pos = kwargs.find(":")) != std::string::npos) {
@@ -430,33 +427,24 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
                     sh = val;
                     break;
                 case 2:
-                    tn = val;
-                    break;
-                case 3:
                     sd = val;
                     break;
-                case 4:
+                case 3:
                     md = val;
                     break;
-                case 5:
+                case 4:
                     bdt = val;
                     break;
-                case 6:
+                case 5:
                     oc =  val;
                     break;
-                case 7:
-                    pg =  val;
-                    break;
-                case 8:
-                    hy =  val;
-                    break;
-                case 9:
+                case 6:
                     hp = val;
                     break;
-                case 10:
+                case 7:
                     sp = val;
                     break;
-                case 11:
+                case 8:
                     noise_param = std::stof(value);
                     nw = noise_param > ZERO_R1;
                     break;
