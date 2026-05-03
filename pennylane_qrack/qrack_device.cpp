@@ -383,7 +383,7 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
 
     QrackDevice([[maybe_unused]] std::string kwargs = "{}")
         : tapeRecording(false)
-        , sh(true)
+        , sh(false)
         , tn(true)
         , sd(true)
         , md(false)
