@@ -51,39 +51,33 @@ This is a complete list of boolean options and their meanings:
 
 .. rst-class:: docstable
 
-    +---------------------------+-------------+-------------------------------------------------------------------------------------+
-    | **Parameter**             | **Default** | **Description**                                                                     |
-    +===========================+=============+=====================================================================================+
-    | `isStabilizerHybrid`      | True        | Use "hybrid" stabilizer optimization?                                               |
-    |                           |             | (Non-Clifford circuits will fall back to near-Clifford or universal simulation.)    |
-    +---------------------------+-------------+-------------------------------------------------------------------------------------+
-    | `isTensorNetwork`         | True        | Use "tensor network" optimization?                                                  |
-    |                           |             | (This option locally simplifies circuits, just-in-time, before running them.)       |
-    +---------------------------+-------------+-------------------------------------------------------------------------------------+
-    | `isSchmidtDecompose`      | True        | Use Schmidt decomposition optimizations?                                            |
-    |                           |             |                                                                                     |
-    +---------------------------+-------------+-------------------------------------------------------------------------------------+
-    | `isSchmidtDecomposeMulti` | False       | Distribute Schmidt-decomposed qubit subsystems to multiple GPUs or accelerators?    |
-    |                           |             | (Mismatched device capacities might hurt overall performance.)                      |
-    +---------------------------+-------------+-------------------------------------------------------------------------------------+
-    | `isBinaryDecisionTree`    | False       | Use "quantum binary decision diagram" ("QBDD") methods?                             |
-    |                           |             | (Note that QBDD is CPU-only.)                                                       |
-    +---------------------------+-------------+-------------------------------------------------------------------------------------+
-    | `isOpenCL`                | True        | Use GPU acceleration?                                                               |
-    |                           |             |                                                                                     |
-    +---------------------------+-------------+-------------------------------------------------------------------------------------+
-    | `isPaged`                 | True        | Use multi-GPU (or multi-memory-segment) acceleration?                               |
-    |                           |             |                                                                                     |
-    +---------------------------+-------------+-------------------------------------------------------------------------------------+
-    | `isCpuGpuHybrid`          | True        | Use CPU/GPU method hybridization?                                                   |
-    |                           |             |                                                                                     |
-    +---------------------------+-------------+-------------------------------------------------------------------------------------+
-    | `isHostPointer`           | False       | Allocate GPU buffer from general host heap?                                         |
-    |                           |             | (Might improve performance or reliability, like when accelerating on an Intel HD)   |
-    +---------------------------+-------------+-------------------------------------------------------------------------------------+
-    | `noise`                   | 0           | Depolarizing noise parameter                                                        |
-    |                           |             | (Noise intensity also responds to "QRACK_GATE_DEPOLARIZATION" environment variable) |
-    +---------------------------+-------------+-------------------------------------------------------------------------------------+
+    +-----------------------------------+-------------+-------------------------------------------------------------------------------------+
+    | **Parameter**                     | **Default** | **Description**                                                                     |
+    +===================================+=============+=====================================================================================+
+    | `is_stabilizer_hybrid`            | True        | Use "hybrid" stabilizer optimization?                                               |
+    |                                   |             | (Non-Clifford circuits will fall back to near-Clifford or universal simulation.)    |
+    +-----------------------------------+-------------+-------------------------------------------------------------------------------------+
+    | `is_schmidt_decompose_multi`      | False       | Distribute Schmidt-decomposed qubit subsystems to multiple GPUs or accelerators?    |
+    |                                   |             | (Mismatched device capacities might hurt overall performance.)                      |
+    +-----------------------------------+-------------+-------------------------------------------------------------------------------------+
+    | `is_binary_decision_tree`         | False       | Use "quantum binary decision diagram" ("QBDD") methods?                             |
+    |                                   |             | (Note that QBDD is CPU-only.)                                                       |
+    +-----------------------------------+-------------+-------------------------------------------------------------------------------------+
+    | `is_gpu`                          | True        | Use GPU acceleration?                                                               |
+    |                                   |             |                                                                                     |
+    +-----------------------------------+-------------+-------------------------------------------------------------------------------------+
+    | `is_near_clifford_tableau_writer` | False       | Use multi-GPU (or multi-memory-segment) acceleration?                               |
+    |                                   |             |                                                                                     |
+    +-----------------------------------+-------------+-------------------------------------------------------------------------------------+
+    | `is_host_pointer`                 | False       | Allocate GPU buffer from general host heap?                                         |
+    |                                   |             | (Might improve performance or reliability, like when accelerating on an Intel HD)   |
+    +-----------------------------------+-------------+-------------------------------------------------------------------------------------+
+    | `is_sparse`                       | False       | For CPU-based simulation, use sparse state vectors (Default is "false")             |
+    |                                   |             |                                                                                     |
+    +-----------------------------------+-------------+-------------------------------------------------------------------------------------+
+    | `noise`                           | 0           | Depolarizing noise parameter                                                        |
+    |                                   |             | (Noise intensity also responds to "QRACK_GATE_DEPOLARIZATION" environment variable) |
+    +-----------------------------------+-------------+-------------------------------------------------------------------------------------+
 
 
 Supported operations
