@@ -152,8 +152,8 @@ class QrackDevice(QubitDevice):
 
     # Use "hybrid" stabilizer optimization? (Default is "true"; non-Clifford circuits will fall back to near-Clifford or universal simulation)
     is_stabilizer_hybrid = True
-    # Use Schmidt decomposition optimizations? (Default is "true")
-    is_schmidt_decompose = True
+    # Use CPU-based near-Clifford method
+    is_near_clifford_tableau_writer = True
     # Distribute Schmidt-decomposed qubit subsystems to multiple GPUs or accelerators, if available? (Default is "False"; mismatched device capacities might hurt overall performance)
     is_schmidt_decompose_multi = False
     # Use "quantum binary decision diagram" ("QBDD") methods? (Default is "false"; note that QBDD is CPU-only)
@@ -183,8 +183,8 @@ class QrackDevice(QubitDevice):
         options = dict(kwargs)
         if "is_stabilizer_hybrid" in options:
             self.is_stabilizer_hybrid = options["is_stabilizer_hybrid"]
-        if "is_schmidt_decompose" in options:
-            self.is_schmidt_decompose = options["is_schmidt_decompose"]
+        if "is_near_clifford_tableau_writer" in options:
+            self.is_near_clifford_tableau_writer = options["is_near_clifford_tableau_writer"]
         if "is_schmidt_decompose_multi" in options:
             self.is_schmidt_decompose_multi = options["is_schmidt_decompose_multi"]
         if "is_binary_decision_tree" in options:
@@ -205,7 +205,7 @@ class QrackDevice(QubitDevice):
             self.num_wires,
             is_stabilizer_hybrid=self.is_stabilizer_hybrid,
             is_schmidt_decompose_multi=self.is_schmidt_decompose_multi,
-            is_schmidt_decompose=self.is_schmidt_decompose,
+            is_near_clifford_tableau_writer=self.is_near_clifford_tableau_writer,
             is_binary_decision_tree=self.is_binary_decision_tree,
             is_gpu=self.is_gpu,
             is_host_pointer=self.is_host_pointer,
@@ -213,14 +213,12 @@ class QrackDevice(QubitDevice):
             noise=self.noise,
         )
         self.device_kwargs = {
-            "is_hybrid_stabilizer": self.is_stabilizer_hybrid,
-            "is_schmidt_decompose": self.is_schmidt_decompose,
-            "is_schmidt_decompose_parallel": self.is_schmidt_decompose_multi,
+            "is_hybrid_stabilizer": self.is_stabilizer_hybrid or self.is_near_clifford_tableau_writer,
+            "is_schmidt_decompose": not self.is_near_clifford_tableau_writer,
+            "is_schmidt_decompose_multi": self.is_schmidt_decompose_multi,
             "is_qpdd": self.is_binary_decision_tree,
-            "is_gpu": self.is_gpu,
-            "is_paged": True,
+            "is_gpu": self.is_gpu and not self.is_near_clifford_tableau_writer,
             "is_host_pointer": self.is_host_pointer,
-            "is_sparse": self.is_sparse,
             "noise": self.noise,
         }
         self._circuit = []

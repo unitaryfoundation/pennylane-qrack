@@ -114,23 +114,19 @@ class QrackAceDevice(QubitDevice):
     )
 
     # Use "hybrid" stabilizer optimization? (Default is "true"; non-Clifford circuits will fall back to near-Clifford or universal simulation)
-    isStabilizerHybrid = True
-    # Use "tensor network" optimization? (Default is "true"; prevents dynamic qubit de-allocation; might function sub-optimally with "hybrid" stabilizer enabled)
-    isTensorNetwork = True
-    # Use Schmidt decomposition optimizations? (Default is "true")
-    isSchmidtDecompose = True
-    # Distribute Schmidt-decomposed qubit subsystems to multiple GPUs or accelerators, if available? (Default is "false"; mismatched device capacities might hurt overall performance)
-    isSchmidtDecomposeMulti = False
+    is_stabilizer_hybrid = True
+    # Use CPU-based near-Clifford method
+    is_near_clifford_tableau_writer = True
+    # Distribute Schmidt-decomposed qubit subsystems to multiple GPUs or accelerators, if available? (Default is "False"; mismatched device capacities might hurt overall performance)
+    is_schmidt_decompose_multi = False
     # Use "quantum binary decision diagram" ("QBDD") methods? (Default is "false"; note that QBDD is CPU-only)
-    isBinaryDecisionTree = False
+    is_binary_decision_tree = False
     # Use GPU acceleration? (Default is "true")
-    isOpenCL = True
-    # Use multi-GPU (or "multi-page") acceleration? (Default is "true")
-    isPaged = True
-    # Use CPU/GPU method hybridization? (Default is "true")
-    isCpuGpuHybrid = True
+    is_gpu = True
     # Allocate GPU buffer from general host heap? (Default is "false"; "true" might improve performance or reliability in certain cases, like if using an Intel HD as accelerator)
-    isHostPointer = True if os.environ.get("PYQRACK_HOST_POINTER_DEFAULT_ON") else False
+    is_host_pointer = True if os.environ.get("PYQRACK_HOST_POINTER_DEFAULT_ON") else False
+    # For CPU-based simulation, use sparse state vectors (Default is "false")
+    is_sparse = False
     # Noise parameter. (Default is "0"; depolarizing noise intensity can also be controlled by "QRACK_GATE_DEPOLARIZATION" environment variable)
     noise = 0
     # How many full simulation columns, between border columns
@@ -144,8 +140,8 @@ class QrackAceDevice(QubitDevice):
         options = dict(kwargs)
         if "is_stabilizer_hybrid" in options:
             self.is_stabilizer_hybrid = options["is_stabilizer_hybrid"]
-        if "is_schmidt_decompose" in options:
-            self.is_schmidt_decompose = options["is_schmidt_decompose"]
+        if "is_near_clifford_tableau_writer" in options:
+            self.is_near_clifford_tableau_writer = options["is_near_clifford_tableau_writer"]
         if "is_schmidt_decompose_multi" in options:
             self.is_schmidt_decompose_multi = options["is_schmidt_decompose_multi"]
         if "is_binary_decision_tree" in options:
@@ -176,7 +172,7 @@ class QrackAceDevice(QubitDevice):
             is_transpose=self.is_transpose,
             is_schmidt_decompose_multi=self.is_schmidt_decompose_multi,
             is_stabilizer_hybrid=self.is_stabilizer_hybrid,
-            is_schmidt_decompose=self.is_schmidt_decompose,
+            is_near_clifford_tableau_writer=self.is_near_clifford_tableau_writer,
             is_binary_decision_tree=self.is_binary_decision_tree,
             is_gpu=self.is_gpu,
             is_host_pointer=self.is_host_pointer,
@@ -186,11 +182,11 @@ class QrackAceDevice(QubitDevice):
             "long_range_columns": self.long_range_columns,
             "long_range_rows": self.long_range_rows,
             "is_transpose": self.is_transpose,
-            "is_hybrid_stabilizer": self.is_stabilizer_hybrid,
-            "is_schmidt_decompose": self.is_schmidt_decompose,
-            "is_schmidt_decompose_parallel": self.is_schmidt_decompose_multi,
+            "is_hybrid_stabilizer": self.is_stabilizer_hybrid or self.is_near_clifford_tableau_writer,
+            "is_schmidt_decompose": not self.is_near_clifford_tableau_writer,
+            "is_schmidt_decompose_multi": self.is_schmidt_decompose_multi,
             "is_qpdd": self.is_binary_decision_tree,
-            "is_gpu": self.is_gpu,
+            "is_gpu": self.is_gpu and not self.is_near_clifford_tableau_writer,
             "is_host_pointer": self.is_host_pointer,
             "noise": self.noise,
         }
