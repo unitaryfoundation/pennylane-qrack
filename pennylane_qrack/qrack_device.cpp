@@ -574,7 +574,8 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
     void NamedOperation(const std::string &name, const std::vector<double> &params,
                         const std::vector<QubitIdType> &wires, bool inverse,
                         const std::vector<QubitIdType> &controlled_wires,
-                        const std::vector<bool> &controlled_values) override
+                        const std::vector<bool> &controlled_values,
+                        const std::vector<std::string> &/*optional_params*/ = {}) override
     {
         // Check the validity of number of qubits and parameters
         RT_FAIL_IF(controlled_wires.size() != controlled_values.size(), "Controlled wires/values size mismatch");
