@@ -1,3 +1,5 @@
+#include <algorithm>
+#include <random>
 #include <regex>
 #include <stdexcept>
 #include <string>
@@ -45,6 +47,13 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
     bool nw;
     size_t shots;
     Qrack::real1_f noise_param;
+    // Readout bit-flip probability applied symmetrically to every sampled bit
+    // inside `_SampleBody`. Configured via the `readout_noise_prob` device kwarg.
+    Qrack::real1_f readout_noise_prob;
+    // RNG used to draw Bernoulli(readout_noise_prob) flips. Seeded once per
+    // QrackDevice instance from std::random_device, so each freshly-constructed
+    // device gets an independent noise stream.
+    std::mt19937 readout_rng;
     Qrack::QInterfacePtr qsim;
     std::map<QubitIdType, bitLenInt> qubit_map;
     std::vector<QrackObservable> obs_cache;
@@ -396,6 +405,8 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
         , nw(false)
         , shots(1U)
         , noise_param(ZERO_R1_F)
+        , readout_noise_prob(ZERO_R1_F)
+        , readout_rng(std::random_device{}())
         , qsim(nullptr)
     {
         // Cut leading '{' and trailing '}'
@@ -413,6 +424,7 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
         keyMap["'is_host_pointer'"] = 6;
         keyMap["'is_sparse'"] = 7;
         keyMap["'noise'"] = 8;
+        keyMap["'readout_noise_prob'"] = 9;
 
         size_t pos;
         while ((pos = kwargs.find(":")) != std::string::npos) {
@@ -447,6 +459,12 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
                 case 8:
                     noise_param = std::stof(value);
                     nw = noise_param > ZERO_R1;
+                    break;
+                case 9:
+                    // Symmetric per-bit readout flip probability
+                    readout_noise_prob = std::clamp(std::stof(value),
+                                                    Qrack::real1_f(0),
+                                                    Qrack::real1_f(1));
                     break;
                 default:
                     break;
@@ -705,13 +723,29 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
     void _SampleBody(const size_t numQubits, const std::map<bitCapInt, int>& q_samples, DataView<double, 2> &samples)
     {
         auto samplesIter = samples.begin();
-        auto q_samplesIter = q_samples.begin();
-        for (auto q_samplesIter = q_samples.begin(); q_samplesIter != q_samples.end(); ++q_samplesIter) {
-            const bitCapInt sample = q_samplesIter->first;
-            int shots = q_samplesIter->second;
-            for (; shots > 0; --shots) {
-                for (size_t wire = 0U; wire < numQubits; ++wire) {
-                    *(samplesIter++) = bi_compare_0((sample >> wire) & 1U) ? 1.0 : 0.0;
+        if (readout_noise_prob > ZERO_R1_F) {
+            // Symmetric per-bit readout-flip noise channel. Each output bit is
+            // XORed (`a != b` on bools) with an independent
+            // Bernoulli(readout_noise_prob) draw before being written.
+            std::bernoulli_distribution bernoulli_dist(static_cast<double>(readout_noise_prob));
+            for (auto q_samplesIter = q_samples.begin(); q_samplesIter != q_samples.end(); ++q_samplesIter) {
+                const bitCapInt sample = q_samplesIter->first;
+                int shots = q_samplesIter->second;
+                for (; shots > 0; --shots) {
+                    for (size_t wire = 0U; wire < numQubits; ++wire) {
+                        const bool clean_bit = bi_compare_0((sample >> wire) & 1U) != 0;
+                        *(samplesIter++) = (clean_bit != bernoulli_dist(readout_rng)) ? 1.0 : 0.0;
+                    }
+                }
+            }
+        } else {
+            for (auto q_samplesIter = q_samples.begin(); q_samplesIter != q_samples.end(); ++q_samplesIter) {
+                const bitCapInt sample = q_samplesIter->first;
+                int shots = q_samplesIter->second;
+                for (; shots > 0; --shots) {
+                    for (size_t wire = 0U; wire < numQubits; ++wire) {
+                        *(samplesIter++) = bi_compare_0((sample >> wire) & 1U) ? 1.0 : 0.0;
+                    }
                 }
             }
         }
