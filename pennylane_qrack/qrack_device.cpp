@@ -812,6 +812,26 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
     }
     void _CountsBody(const size_t numQubits, const std::map<bitCapInt, int>& q_samples, DataView<int64_t, 1> &counts)
     {
+        if (readout_noise_prob > ZERO_R1_F) {
+            // With readout noise active each individual shot may flip its
+            // bits independently, so the bin a shot ends up in has to be
+            // recomputed per shot (unlike the noiseless path which can
+            // build the basis index once per unique bitstring).
+            std::bernoulli_distribution bernoulli_dist(static_cast<double>(readout_noise_prob));
+            for (auto q_samplesIter = q_samples.begin(); q_samplesIter != q_samples.end(); ++q_samplesIter) {
+                const bitCapInt sample = q_samplesIter->first;
+                int shots = q_samplesIter->second;
+                for (; shots > 0; --shots) {
+                    std::bitset<1U << QBCAPPOW> basisState;
+                    for (size_t wire = 0U; wire < numQubits; ++wire) {
+                        const bool clean_bit = bi_compare_0((sample >> wire) & 1U) != 0;
+                        basisState[wire] = clean_bit != bernoulli_dist(readout_rng);
+                    }
+                    ++counts(static_cast<size_t>(basisState.to_ulong()));
+                }
+            }
+            return;
+        }
         for (auto q_samplesIter = q_samples.begin(); q_samplesIter != q_samples.end(); ++q_samplesIter) {
             const bitCapInt sample = q_samplesIter->first;
             int shots = q_samplesIter->second;
