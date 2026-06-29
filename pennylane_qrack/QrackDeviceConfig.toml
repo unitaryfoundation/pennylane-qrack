@@ -93,7 +93,7 @@ Prod = {}
 
 ExpectationMP   = { conditions = [ "analytic" ] }
 VarianceMP      = { conditions = [ "analytic" ] }
-ProbabilityMP   = { conditions = [ "analytic" ] }
+ProbabilityMP   = { }
 StateMP         = { conditions = [ "analytic" ] }
 SampleMP        = { conditions = [ "finiteshots" ] }
 CountsMP        = { conditions = [ "finiteshots" ] }

@@ -694,6 +694,34 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
 #endif
         reverseWires();
     }
+    // Apply a symmetric per-bit readout-flip channel to a probability vector
+    // over `numQubits` wires in place. Each bit position is mixed by the
+    // 2x2 confusion matrix [[1-p, p], [p, 1-p]] applied along that axis,
+    // which is equivalent to (and much cheaper than) building the full
+    // Kronecker transition matrix.
+    void _apply_readout_noise_to_probs(DataView<double, 1> &p, const size_t numQubits)
+    {
+        if (readout_noise_prob <= ZERO_R1_F) {
+            return;
+        }
+        const double pr = static_cast<double>(readout_noise_prob);
+        const double q = 1.0 - pr;
+        const size_t numStates = static_cast<size_t>(1ULL << numQubits);
+        for (size_t bit = 0U; bit < numQubits; ++bit) {
+            const size_t mask = static_cast<size_t>(1ULL << bit);
+            for (size_t s = 0U; s < numStates; ++s) {
+                if (s & mask) {
+                    continue;
+                }
+                const size_t s_flipped = s | mask;
+                const double p_lo = p(s);
+                const double p_hi = p(s_flipped);
+                p(s) = q * p_lo + pr * p_hi;
+                p(s_flipped) = pr * p_lo + q * p_hi;
+            }
+        }
+    }
+
     void Probs(DataView<double, 1>& p) override
     {
         RT_FAIL_IF(p.size() != (size_t)((uint64_t)qsim->GetMaxQPower()), "Invalid size for the pre-allocated probabilities vector");
@@ -706,6 +734,7 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
         std::copy(_p.get(), _p.get() + p.size(), p.begin());
 #endif
         reverseWires();
+        _apply_readout_noise_to_probs(p, qsim->GetQubitCount());
     }
     void PartialProbs(DataView<double, 1> &p, const std::vector<QubitIdType> &wires) override
     {
@@ -719,6 +748,7 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
         qsim->ProbBitsAll(dev_wires, _p.get());
         std::copy(_p.get(), _p.get() + p.size(), p.begin());
 #endif
+        _apply_readout_noise_to_probs(p, wires.size());
     }
     void _SampleBody(const size_t numQubits, const std::map<bitCapInt, int>& q_samples, DataView<double, 2> &samples)
     {
