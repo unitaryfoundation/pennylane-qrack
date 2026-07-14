@@ -166,6 +166,10 @@ class QrackDevice(QubitDevice):
     is_sparse = False
     # Noise parameter. (Default is "0"; depolarizing noise intensity can also be controlled by "QRACK_GATE_DEPOLARIZATION" environment variable)
     noise = 0
+    # Symmetric per-bit readout-flip probability applied to every sampled bit
+    # inside the `_SampleBody` in qrack_device.cpp.
+    # Default 0.0 means noiseless readout.
+    readout_noise_prob = 0.0
 
     @staticmethod
     def get_c_interface():
@@ -199,6 +203,16 @@ class QrackDevice(QubitDevice):
             self.noise = options["noise"]
             if (self.noise != 0) and (shots is None):
                 raise ValueError("Shots must be finite for noisy simulation (not analytical mode).")
+        if "readout_noise_prob" in options:
+            # Symmetric per-bit readout-flip probability for the catalyst shim
+            # (see `_SampleBody` in qrack_device.cpp). Pure-pyqrack execution
+            # ignores it; only @qjit'd Sample/PartialSample paths apply the flip.
+            self.readout_noise_prob = float(options["readout_noise_prob"])
+            if (self.readout_noise_prob != 0.0) and (shots is None):
+                raise ValueError(
+                    "Shots must be finite when readout_noise_prob != 0 "
+                    "(analytical mode is incompatible with per-shot readout noise)."
+                )
         super().__init__(wires=wires, shots=shots)
         self.shots = shots
         self._state = QrackSimulator(
@@ -221,6 +235,7 @@ class QrackDevice(QubitDevice):
             "is_host_pointer": self.is_host_pointer,
             "is_sparse": self.is_sparse,
             "noise": self.noise,
+            "readout_noise_prob": self.readout_noise_prob,
         }
         self._circuit = []
 
