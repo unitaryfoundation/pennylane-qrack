@@ -135,6 +135,10 @@ class QrackAceDevice(QubitDevice):
     long_range_rows = 4
     # Whether to transpose rows and columns
     is_transpose = False
+    # History window for "path-integral-like" correction
+    history_window=0
+    # Whether boundary row at end is explicitly inserted to create a torus
+    is_torus=True
 
     def __init__(self, wires=0, shots=None, **kwargs):
         options = dict(kwargs)
@@ -162,6 +166,10 @@ class QrackAceDevice(QubitDevice):
             self.long_range_rows = options["long_range_rows"]
         if "is_transpose" in options:
             self.is_transpose = options["is_transpose"]
+        if "history_window" in options:
+            self.history_window = options["history_window"]
+        if "is_torus" in options:
+            self.is_torus = options["is_torus"]
 
         super().__init__(wires=wires, shots=shots)
         self.shots = shots
@@ -178,6 +186,8 @@ class QrackAceDevice(QubitDevice):
             is_host_pointer = self.is_host_pointer,
             is_sparse = self.is_sparse,
             noise = self.noise,
+            history_window = self.history_window,
+            is_torus = self.is_torus,
         )
         self.device_kwargs = {
             "long_range_columns": self.long_range_columns,
@@ -191,6 +201,8 @@ class QrackAceDevice(QubitDevice):
             "is_host_pointer": self.is_host_pointer,
             "is_sparse": self.is_sparse,
             "noise": self.noise,
+            "history_window": self.history_window,
+            "is_torus": self.is_torus,
         }
         self._circuit = []
 
