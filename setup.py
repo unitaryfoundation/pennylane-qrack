@@ -32,7 +32,7 @@ class Build(build_py):
 with open("./pennylane_qrack/_version.py") as f:
     (version,) = re.findall('__version__ = "(.*)"', f.read())
 
-requirements = ["pennylane>=0.39.0", "pyqrack>=2.0.0", "numpy>=1.16"]
+requirements = ["pennylane>=0.39.0", "pyqrack>=2.11.0, <3.0.0", "numpy>=1.16"]
 
 info = {
     "name": "pennylane-qrack",
