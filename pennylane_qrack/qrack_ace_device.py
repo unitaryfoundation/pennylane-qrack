@@ -194,7 +194,6 @@ class QrackAceDevice(QubitDevice):
             "is_qpdd": self.is_binary_decision_tree,
             "is_gpu": self.is_gpu and not self.is_near_clifford_tableau_writer,
             "is_host_pointer": self.is_host_pointer,
-            "is_sparse": self.is_sparse,
             "noise": self.noise,
             "history_window": self.history_window,
             "is_torus": self.is_torus,
