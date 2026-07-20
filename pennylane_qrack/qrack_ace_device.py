@@ -125,8 +125,6 @@ class QrackAceDevice(QubitDevice):
     is_gpu = True
     # Allocate GPU buffer from general host heap? (Default is "false"; "true" might improve performance or reliability in certain cases, like if using an Intel HD as accelerator)
     is_host_pointer = True if os.environ.get("PYQRACK_HOST_POINTER_DEFAULT_ON") else False
-    # For CPU-based simulation, use sparse state vectors (Default is "false")
-    is_sparse = False
     # Noise parameter. (Default is "0"; depolarizing noise intensity can also be controlled by "QRACK_GATE_DEPOLARIZATION" environment variable)
     noise = 0
     # How many full simulation columns, between border columns
@@ -154,8 +152,6 @@ class QrackAceDevice(QubitDevice):
             self.is_gpu = options["is_gpu"]
         if "is_host_pointer" in options:
             self.is_host_pointer = options["is_host_pointer"]
-        if "is_sparse" in options:
-            self.is_sparse = options["is_sparse"]
         if "noise" in options:
             self.noise = options["noise"]
             if (self.noise != 0) and (shots is None):
@@ -184,7 +180,6 @@ class QrackAceDevice(QubitDevice):
             is_binary_decision_tree = self.is_binary_decision_tree,
             is_gpu = self.is_gpu,
             is_host_pointer = self.is_host_pointer,
-            is_sparse = self.is_sparse,
             noise = self.noise,
             history_window = self.history_window,
             is_torus = self.is_torus,
