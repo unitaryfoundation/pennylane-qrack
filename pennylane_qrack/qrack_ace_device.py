@@ -133,8 +133,6 @@ class QrackAceDevice(QubitDevice):
     long_range_rows = 4
     # Whether to transpose rows and columns
     is_transpose = False
-    # History window for "path-integral-like" correction
-    history_window=0
     # Whether boundary row at end is explicitly inserted to create a torus
     is_torus=True
 
@@ -162,8 +160,6 @@ class QrackAceDevice(QubitDevice):
             self.long_range_rows = options["long_range_rows"]
         if "is_transpose" in options:
             self.is_transpose = options["is_transpose"]
-        if "history_window" in options:
-            self.history_window = options["history_window"]
         if "is_torus" in options:
             self.is_torus = options["is_torus"]
 
@@ -181,7 +177,6 @@ class QrackAceDevice(QubitDevice):
             is_gpu = self.is_gpu,
             is_host_pointer = self.is_host_pointer,
             noise = self.noise,
-            history_window = self.history_window,
             is_torus = self.is_torus,
         )
         self.device_kwargs = {
@@ -195,7 +190,6 @@ class QrackAceDevice(QubitDevice):
             "is_gpu": self.is_gpu and not self.is_near_clifford_tableau_writer,
             "is_host_pointer": self.is_host_pointer,
             "noise": self.noise,
-            "history_window": self.history_window,
             "is_torus": self.is_torus,
         }
         self._circuit = []
