@@ -143,7 +143,7 @@ jobs:
           python -m pip install wheel setuptools PennyLane-Catalyst
 
       - name: Install Homebrew (MacOS)
-        uses: Homebrew/actions/setup-homebrew@master
+        uses: Homebrew/actions/setup-homebrew@main
 
       - name: Prepare Build Environment (MacOS)
         run: |
@@ -203,7 +203,7 @@ jobs:
           python -m pip install wheel setuptools PennyLane-Catalyst
 
       - name: Install Homebrew (MacOS)
-        uses: Homebrew/actions/setup-homebrew@master
+        uses: Homebrew/actions/setup-homebrew@main
 
       - name: Prepare Build Environment (MacOS)
         run: |
@@ -263,7 +263,7 @@ jobs:
           python -m pip install wheel setuptools PennyLane-Catalyst
 
       - name: Install Homebrew (MacOS)
-        uses: Homebrew/actions/setup-homebrew@master
+        uses: Homebrew/actions/setup-homebrew@main
 
       - name: Prepare Build Environment (MacOS)
         run: |
