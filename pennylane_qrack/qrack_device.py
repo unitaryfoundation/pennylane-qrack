@@ -208,11 +208,6 @@ class QrackDevice(QubitDevice):
             # (see `_SampleBody` in qrack_device.cpp). Pure-pyqrack execution
             # ignores it; only @qjit'd Sample/PartialSample paths apply the flip.
             self.readout_noise_prob = float(options["readout_noise_prob"])
-            if (self.readout_noise_prob != 0.0) and (shots is None):
-                raise ValueError(
-                    "Shots must be finite when readout_noise_prob != 0 "
-                    "(analytical mode is incompatible with per-shot readout noise)."
-                )
         super().__init__(wires=wires, shots=shots)
         self.shots = shots
         self._state = QrackSimulator(
@@ -238,6 +233,17 @@ class QrackDevice(QubitDevice):
             "readout_noise_prob": self.readout_noise_prob,
         }
         self._circuit = []
+
+    def execute(self, circuit, **kwargs):
+        # Checked at execution rather than in __init__: QNode-level shots (qp.set_shots,
+        # qp.qnode(..., shots=)) are only applied to the device for the duration of the
+        # execution. The @qjit path performs the same check in SetDeviceShots (qrack_device.cpp).
+        if (self.readout_noise_prob != 0.0) and (self.shots is None):
+            raise ValueError(
+                "Shots must be finite when readout_noise_prob != 0 "
+                "(analytical mode is incompatible with per-shot readout noise)."
+            )
+        return super().execute(circuit, **kwargs)
 
     def _reverse_state(self):
         end = self.num_wires - 1
