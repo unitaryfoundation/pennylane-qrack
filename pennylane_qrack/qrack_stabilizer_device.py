@@ -14,6 +14,7 @@
 """
 Base device class for PennyLane-Qrack.
 """
+
 from functools import reduce
 import cmath, math
 import os

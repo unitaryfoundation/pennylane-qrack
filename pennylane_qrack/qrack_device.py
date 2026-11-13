@@ -14,6 +14,7 @@
 """
 Base device class for PennyLane-Qrack.
 """
+
 from functools import reduce
 import cmath, math
 import os
@@ -208,26 +209,22 @@ class QrackDevice(QubitDevice):
             # (see `_SampleBody` in qrack_device.cpp). Pure-pyqrack execution
             # ignores it; only @qjit'd Sample/PartialSample paths apply the flip.
             self.readout_noise_prob = float(options["readout_noise_prob"])
-            if (self.readout_noise_prob != 0.0) and (shots is None):
-                raise ValueError(
-                    "Shots must be finite when readout_noise_prob != 0 "
-                    "(analytical mode is incompatible with per-shot readout noise)."
-                )
         super().__init__(wires=wires, shots=shots)
         self.shots = shots
         self._state = QrackSimulator(
             self.num_wires,
-            is_stabilizer_hybrid = self.is_stabilizer_hybrid or self.is_near_clifford_tableau_writer,
-            is_schmidt_decompose_multi = self.is_schmidt_decompose_multi,
-            is_near_clifford_tableau_writer = self.is_near_clifford_tableau_writer,
-            is_binary_decision_tree = self.is_binary_decision_tree,
-            is_gpu = self.is_gpu,
-            is_host_pointer = self.is_host_pointer,
-            is_sparse = self.is_sparse,
-            noise = self.noise,
+            is_stabilizer_hybrid=self.is_stabilizer_hybrid or self.is_near_clifford_tableau_writer,
+            is_schmidt_decompose_multi=self.is_schmidt_decompose_multi,
+            is_near_clifford_tableau_writer=self.is_near_clifford_tableau_writer,
+            is_binary_decision_tree=self.is_binary_decision_tree,
+            is_gpu=self.is_gpu,
+            is_host_pointer=self.is_host_pointer,
+            is_sparse=self.is_sparse,
+            noise=self.noise,
         )
         self.device_kwargs = {
-            "is_stabilizer_hybrid": self.is_stabilizer_hybrid or self.is_near_clifford_tableau_writer,
+            "is_stabilizer_hybrid": self.is_stabilizer_hybrid
+            or self.is_near_clifford_tableau_writer,
             "is_schmidt_decompose_multi": self.is_schmidt_decompose_multi,
             "is_schmidt_decompose": not self.is_near_clifford_tableau_writer,
             "is_qpdd": self.is_binary_decision_tree,
@@ -238,6 +235,17 @@ class QrackDevice(QubitDevice):
             "readout_noise_prob": self.readout_noise_prob,
         }
         self._circuit = []
+
+    def execute(self, circuit, **kwargs):
+        # Checked at execution rather than in __init__: QNode-level shots (qp.set_shots,
+        # qp.qnode(..., shots=)) are only applied to the device for the duration of the
+        # execution. The @qjit path performs the same check in SetDeviceShots (qrack_device.cpp).
+        if (self.readout_noise_prob != 0.0) and (self.shots is None):
+            raise ValueError(
+                "Shots must be finite when readout_noise_prob != 0 "
+                "(analytical mode is incompatible with per-shot readout noise)."
+            )
+        return super().execute(circuit, **kwargs)
 
     def _reverse_state(self):
         end = self.num_wires - 1

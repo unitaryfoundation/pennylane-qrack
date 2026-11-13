@@ -13,4 +13,5 @@
 # limitations under the License.
 
 """PennyLane-Qrack plugin (no public API)"""
+
 from ._version import __version__
