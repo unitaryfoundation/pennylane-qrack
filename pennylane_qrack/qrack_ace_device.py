@@ -14,6 +14,7 @@
 """
 Base device class for PennyLane-Qrack.
 """
+
 from functools import reduce
 import cmath, math
 import os
@@ -134,7 +135,7 @@ class QrackAceDevice(QubitDevice):
     # Whether to transpose rows and columns
     is_transpose = False
     # Whether boundary row at end is explicitly inserted to create a torus
-    is_torus=True
+    is_torus = True
 
     def __init__(self, wires=0, shots=None, **kwargs):
         options = dict(kwargs)
@@ -170,20 +171,21 @@ class QrackAceDevice(QubitDevice):
             long_range_columns=self.long_range_columns,
             long_range_rows=self.long_range_rows,
             is_transpose=self.is_transpose,
-            is_stabilizer_hybrid = self.is_stabilizer_hybrid or self.is_near_clifford_tableau_writer,
-            is_schmidt_decompose_multi = self.is_schmidt_decompose_multi,
-            is_near_clifford_tableau_writer = self.is_near_clifford_tableau_writer,
-            is_binary_decision_tree = self.is_binary_decision_tree,
-            is_gpu = self.is_gpu,
-            is_host_pointer = self.is_host_pointer,
-            noise = self.noise,
-            is_torus = self.is_torus,
+            is_stabilizer_hybrid=self.is_stabilizer_hybrid or self.is_near_clifford_tableau_writer,
+            is_schmidt_decompose_multi=self.is_schmidt_decompose_multi,
+            is_near_clifford_tableau_writer=self.is_near_clifford_tableau_writer,
+            is_binary_decision_tree=self.is_binary_decision_tree,
+            is_gpu=self.is_gpu,
+            is_host_pointer=self.is_host_pointer,
+            noise=self.noise,
+            is_torus=self.is_torus,
         )
         self.device_kwargs = {
             "long_range_columns": self.long_range_columns,
             "long_range_rows": self.long_range_rows,
             "is_transpose": self.is_transpose,
-            "is_stabilizer_hybrid": self.is_stabilizer_hybrid or self.is_near_clifford_tableau_writer,
+            "is_stabilizer_hybrid": self.is_stabilizer_hybrid
+            or self.is_near_clifford_tableau_writer,
             "is_schmidt_decompose_multi": self.is_schmidt_decompose_multi,
             "is_schmidt_decompose": not self.is_near_clifford_tableau_writer,
             "is_qpdd": self.is_binary_decision_tree,
