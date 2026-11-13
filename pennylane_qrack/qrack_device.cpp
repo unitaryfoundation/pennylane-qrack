@@ -584,6 +584,10 @@ struct QrackDevice final : public Catalyst::Runtime::QuantumDevice {
         if ((s > 1U) && (noise_param > ZERO_R1_F)) {
             throw std::domain_error("Shots > 1 can't be simulated with noise on the Qrack back end! (Likely, you want to set mcm_method=\"one-shot\" on your qnode, with multiple shots.)");
         }
+        // Catalyst calls this at device initialization with the QNode's total shots (0 in analytic mode).
+        if ((s == 0U) && (readout_noise_prob > ZERO_R1_F)) {
+            throw std::domain_error("Shots must be finite when readout_noise_prob != 0 (analytical mode is incompatible with per-shot readout noise).");
+        }
         shots = s;
     }
     [[nodiscard]] auto GetDeviceShots() const -> size_t override { return shots; }
